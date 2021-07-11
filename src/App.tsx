@@ -75,6 +75,7 @@ export default function App() {
 
     // Similar to componentDidMount and componentDidUpdate:
     useEffect(() => {
+        if (user) return
         firebase.auth().onAuthStateChanged((user) => {
             console.log(user)
             if (user) {
