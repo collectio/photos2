@@ -57,7 +57,9 @@ const loadAlbums = (user: any, dispatch: any) => {
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             // console.log(doc.id, ' => ', doc.data());
-            dispatch(addAlbums(doc.data() as AlbumType))
+            const album = doc.data() as AlbumType
+            album.id = doc.id
+            dispatch(addAlbums(album))
         });
         // this.setGameImage()
         if (querySnapshot.empty) {
