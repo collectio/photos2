@@ -2,7 +2,7 @@ import React, { useState, useEffect, Dispatch } from 'react'
 import {
     Link,
     useParams
-} from "react-router-dom";
+} from 'react-router-dom'
 
 import { useSelector } from 'react-redux'
 import { selectAlbums } from './store/albums'
