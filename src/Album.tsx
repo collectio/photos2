@@ -10,8 +10,9 @@ import { AlbumType, PhotoType, GameType } from './@types'
 
 export default function Album() {
     const albums: AlbumType[] = useSelector(selectAlbums)
+    const defaultAlbum: unknown = null
     const [state, setState] = useState({
-        album: null as AlbumType
+        album: defaultAlbum as AlbumType
     })
 
     let { id } = useParams()
