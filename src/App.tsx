@@ -31,6 +31,7 @@ import { selectAlbums, addAlbums } from './store/albums'
 
 
 import Home from './Home'
+import Album from './Album'
 import Generation from './Generation'
 
 
@@ -60,7 +61,7 @@ const loadAlbums = (user: any, dispatch: any) => {
             const album = doc.data() as AlbumType
             album.id = doc.id
             dispatch(addAlbums(album))
-        });
+        })
         // this.setGameImage()
         if (querySnapshot.empty) {
             dispatch(addAlbums(sampleAlbum))
@@ -139,8 +140,8 @@ export default function App() {
                     <Route path="/about">
                         <Generation />
                     </Route>
-                    <Route path="/users">
-                        <Generation />
+                    <Route path="/album/:id">
+                        <Album />
                     </Route>
                     <Route path="/">
                         {user ? (

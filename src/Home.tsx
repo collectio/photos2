@@ -1,20 +1,19 @@
 import React, { useState, useEffect, Dispatch } from 'react'
 import { Link } from 'react-router-dom'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { selectAlbums, addAlbums } from './store/albums'
+import { useSelector } from 'react-redux'
+import { selectAlbums } from './store/albums'
 import { AlbumType } from './@types'
 
 
 export default function Home() {
     const albums: AlbumType[] = useSelector(selectAlbums)
-    const dispatch = useDispatch()
     return (
         <div id="home">
             <div className="albums">
                 {albums.map((album) => (
                     <div className="album" key={album.id}>
-                        <Link to={`/album`}>
+                        <Link to={`/album/${album.id}`}>
                             <div className="image">
                                 <h4>{album.title}</h4>
                                 <span>{album.date}</span>
@@ -28,10 +27,9 @@ export default function Home() {
                         <div className="games">
                             {album.games.map((game, i) => (
                                 <Link to={{
-                                    pathname: "/game",
+                                    pathname: `/game/${game.id}`,
                                     state: { game: game }
-                                }} key={game.id+game.title}>
-                                    
+                                }} key={game.id+game.title}>                                    
                                     <div className="game">
                                         <div style={{ backgroundImage: `url(${game.image})` }}></div>
                                         <span className="title">
