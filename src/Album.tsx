@@ -15,13 +15,13 @@ export default function Album() {
     })
 
     let { id } = useParams()
-    if (state.album === null) {
-        console.log(id)
-        console.log(albums)
-        const album = albums.filter((a) => a.id === id)[0]
-        console.log(album)
-        setState({ album })
-    }
+    // Similar to componentDidMount and componentDidUpdate:
+    useEffect(() => {
+        if (!state.album) {
+            const album = albums.filter((a) => a.id === id)[0]
+            if (album) setState({ album })
+        }
+    })
 
     if (!state.album) return null
     const album = state.album
