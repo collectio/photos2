@@ -32,6 +32,7 @@ import { selectAlbums, addAlbums } from './store/albums'
 
 import Home from './Home'
 import Album from './Album'
+import Game from './Game'
 import Generation from './Generation'
 
 
@@ -137,8 +138,8 @@ export default function App() {
                 {/* A <Switch> looks through its children <Route>s and
                     renders the first one that matches the current URL. */}
                 <Switch>
-                    <Route path="/about">
-                        <Generation />
+                    <Route path="/game/:id">
+                        <Game />
                     </Route>
                     <Route path="/album/:id">
                         <Album />

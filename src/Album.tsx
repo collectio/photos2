@@ -52,7 +52,7 @@ export default function Album() {
                 <div className="games">
                     {album.games.map((game: GameType, i: number) => {
                         return <Link to={{
-                            pathname: "/game",
+                            pathname: `/game/${game.id}`,
                             state: { game: game }
                         }} key={game.id}>
                             <div key={'game' + i} className="game">
