@@ -1,17 +1,12 @@
 import React, { useState, useEffect, Dispatch } from 'react'
-import {
-    withRouter,
-    Link,
-    useParams
-} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 
 function Game(props: any) {
-    console.log(props.location)
     const { game } = props.location.state as any
     return (<div id="game">
         <nav>
             <a onClick={() => props.history.goBack()}>
-                <img className="logo" src="/assets/back.svg" alt="戻る" />
+                <img className="logo" src="./assets/back.svg" alt="戻る" />
             </a>
             <span></span>
             <span></span>
