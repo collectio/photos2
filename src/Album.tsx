@@ -15,7 +15,7 @@ export default function Album() {
         album: defaultAlbum as AlbumType
     })
 
-    let { id } = useParams()
+    let { id } = useParams<{ id: string }>()
     // Similar to componentDidMount and componentDidUpdate:
     useEffect(() => {
         if (!state.album) {
