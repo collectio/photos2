@@ -18,7 +18,6 @@ const ShareSelect: React.VFC = (props: any) => {
 
     let { id } = useParams<{ id: string }>()
     useEffect(() => {
-        scrollTo(0, 0)
         if (!album) {
             const alb = albums.filter((a) => a.id === id)[0]
             if (alb) setAlbum(alb)
@@ -26,16 +25,19 @@ const ShareSelect: React.VFC = (props: any) => {
     })
 
     const select = (index: number) => {
-        console.log(index)
         if (selectedIndexes.indexOf(index) === -1) {
             if (selectDisabled === false) {
                 selectedIndexes.push(index)
-                setSelectedIndexes(selectedIndexes)
+                const newSelectedIndexes = selectedIndexes.concat([])
+                setSelectedIndexes(newSelectedIndexes)
             }
         } else {
             selectedIndexes.splice(selectedIndexes.indexOf(index), 1)
+            const newSelectedIndexes = selectedIndexes.concat([])
+            setSelectedIndexes(newSelectedIndexes)
             setSelectDisabled(false)
         }
+        
         if (selectedIndexes.length >= 4) {
             setSelectDisabled(true)
         }
