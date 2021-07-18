@@ -76,8 +76,8 @@ const Album: React.VFC = (props: any) => {
                 <div className="photos">
                     {album.photos.map((photo: PhotoType, index: number) => {
                         return (<Link to={{
-                            pathname: "/photo",
-                            state: { album: album, photo: photo, index: index }
+                            pathname: `/photo/${album.id}`,
+                            state: { album: album, index: index }
                         }} key={photo.image}>
                             <div className="photo" style={{ backgroundImage: `url(${photo.image})` }}></div>
                         </Link>);

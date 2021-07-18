@@ -33,6 +33,7 @@ import { selectAlbums, addAlbums } from './store/albums'
 import Home from './Home'
 import Album from './Album'
 import Game from './Game'
+import Photo from './Photo'
 import Generation from './Generation'
 
 
@@ -81,9 +82,7 @@ export default function App() {
     useEffect(() => {
         if (user) return
         firebase.auth().onAuthStateChanged((user) => {
-            console.log(user)
             if (user) {
-                console.log(user)
                 dispatch(setUser({uid: user.uid}))
                 loadAlbums(user, dispatch)
             }
@@ -138,6 +137,9 @@ export default function App() {
                 {/* A <Switch> looks through its children <Route>s and
                     renders the first one that matches the current URL. */}
                 <Switch>
+                    <Route path="/photo/:id">
+                        <Photo />
+                    </Route>
                     <Route path="/game/:id">
                         <Game />
                     </Route>
