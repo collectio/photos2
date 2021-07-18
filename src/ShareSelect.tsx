@@ -28,19 +28,15 @@ const ShareSelect: React.VFC = (props: any) => {
         if (selectedIndexes.indexOf(index) === -1) {
             if (selectDisabled === false) {
                 selectedIndexes.push(index)
-                const newSelectedIndexes = selectedIndexes.concat([])
-                setSelectedIndexes(newSelectedIndexes)
+                if (selectedIndexes.length >= 4) setSelectDisabled(true)
+                setSelectedIndexes([...selectedIndexes])
             }
         } else {
             selectedIndexes.splice(selectedIndexes.indexOf(index), 1)
-            const newSelectedIndexes = selectedIndexes.concat([])
-            setSelectedIndexes(newSelectedIndexes)
+            setSelectedIndexes([...selectedIndexes])
             setSelectDisabled(false)
         }
         
-        if (selectedIndexes.length >= 4) {
-            setSelectDisabled(true)
-        }
     }
 
     const share = () => {
