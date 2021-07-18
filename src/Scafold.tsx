@@ -18,7 +18,7 @@ const Component: React.VFC = (props: any) => {
     if (!state.album) return null
     const album = state.album
     return (
-
+        <div></div>
     )
 }
 

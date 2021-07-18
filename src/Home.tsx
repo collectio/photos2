@@ -6,7 +6,7 @@ import { selectAlbums } from './store/albums'
 import { AlbumType } from './@types'
 
 
-export default function Home() {
+const Home: React.VFC = (props: any) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
     return (
         <div id="home">
@@ -50,3 +50,5 @@ export default function Home() {
         </div>
     )
 }
+
+export default Home

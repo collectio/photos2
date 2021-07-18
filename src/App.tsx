@@ -108,6 +108,8 @@ export default function App() {
         })
     }
 
+    const W = Welcome as any
+
     return (
         <Router>
             <div>
@@ -132,12 +134,13 @@ export default function App() {
                     <Route path="/album/:id">
                         <Album />
                     </Route>
-                    <Route path="/">
-                        {user ? (
-                            <Home />
-                        ) : (
-                            <Welcome />
-                        )}
+                    <Route path="/" render={() => {
+                        if (user) {
+                            return <Home />
+                        } else {
+                            return <W GoogleLogin={GoogleLogin} />
+                        }
+                     }}>
                     </Route>
                 </Switch>
             </div>

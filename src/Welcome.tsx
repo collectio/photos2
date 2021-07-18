@@ -1,13 +1,11 @@
-import React, { useState, useEffect, Dispatch } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { useSelector } from 'react-redux'
-import { selectAlbums } from './store/albums'
-import { AlbumType } from './@types'
+interface Props {
+    GoogleLogin: () => void
+}
 
-
-export default function Home() {
-    const albums: AlbumType[] = useSelector(selectAlbums)
+const Welcome: React.VFC<Props> = (props: any) => {
     return (
         <div id="home">
             <nav>
@@ -15,38 +13,22 @@ export default function Home() {
                     <img className="logo" src="/collectio.svg" alt="Collectio" />
                 </Link>
             </nav>
-            <div className="albums">
-                {albums.map((album) => (
-                    <div className="album" key={album.id}>
-                        <Link to={`/album/${album.id}`}>
-                            <div className="image">
-                                <h4>{album.title}</h4>
-                                <span>{album.date}</span>
-                                <div className="photos">
-                                    {album.photos.map((photo) => (
-                                        <div key={photo.image} className="photo" style={{ backgroundImage: `url(${photo.image})` }}></div>
-                                    ))}
-                                </div>
-                            </div>
-                        </Link>
-                        <div className="games">
-                            {album.games.map((game, i) => (
-                                <Link to={{
-                                    pathname: `/game/${game.id}`,
-                                    state: { game: game }
-                                }} key={game.id+game.title}>                                    
-                                    <div className="game">
-                                        <div style={{ backgroundImage: `url(${game.image})` }}></div>
-                                        <span className="title">
-                                            {game.title}
-                                        </span>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-                ))}
+            <div className="login">
+                <h2>Collectio Photoへようこそ</h2>
+                <p>
+                    このアプリは、ボードゲームを遊んだ時の写真をアルバムにまとめて、遊んだゲームを記録できるアプリです。<br /><br />
+                    「この前、あの時、遊んだゲームはなんだった？」<br />
+                    そんな時に役立ちます。<br /><br />
+                    どんな風に使えるか、ログインしてサンプルのアルバムを見てみましょう。
+                </p>
+                <p>
+                    <button className="google" onClick={props.GoogleLogin}>
+                        Googleでログイン
+                    </button>
+                </p>
             </div>
         </div>
     )
 }
+
+export default Welcome
