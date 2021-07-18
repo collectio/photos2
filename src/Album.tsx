@@ -50,8 +50,7 @@ const Album: React.VFC = (props: any) => {
                         </a>
                     ) : (
                         <Link to={{
-                            pathname: "/shareSelect",
-                            state: { album: album }
+                            pathname: `/share/${album.id}`,
                         }} className="share">
                             シェア
                         </Link>

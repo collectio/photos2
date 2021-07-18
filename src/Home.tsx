@@ -14,7 +14,6 @@ interface Props {
 const Home: React.VFC<Props> = (props) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
     const user = useSelector(selectUser)
-    console.log(user)
     return (
         <div id="home">
             <nav>

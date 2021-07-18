@@ -35,6 +35,7 @@ import Home from './Home'
 import Album from './Album'
 import Game from './Game'
 import Photo from './Photo'
+import ShareSelect from './ShareSelect'
 
 
 // サンプルのアルバム
@@ -112,6 +113,9 @@ export default function App() {
         <Router>
             <div>
                 <Switch>
+                    <Route path="/share/:id">
+                        <ShareSelect />
+                    </Route>
                     <Route path="/photo/:id">
                         <Photo />
                     </Route>
