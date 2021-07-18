@@ -5,7 +5,7 @@ interface Props {
     GoogleLogin: () => void
 }
 
-const Welcome: React.VFC<Props> = (props: any) => {
+const Welcome: React.VFC<Props> = (props) => {
     return (
         <div id="home">
             <nav>

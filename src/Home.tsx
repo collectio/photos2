@@ -3,11 +3,18 @@ import { Link } from 'react-router-dom'
 
 import { useSelector } from 'react-redux'
 import { selectAlbums } from './store/albums'
+import { selectUser } from './store/user'
 import { AlbumType } from './@types'
 
+interface Props {
+    signOut: () => void
+}
 
-const Home: React.VFC = (props: any) => {
+
+const Home: React.VFC<Props> = (props) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
+    const user = useSelector(selectUser)
+    console.log(user)
     return (
         <div id="home">
             <nav>
@@ -15,6 +22,13 @@ const Home: React.VFC = (props: any) => {
                     <img className="logo" src="/collectio.svg" alt="Collectio" />
                 </Link>
             </nav>
+            <div className="profile">
+                <img src={user.photoURL} alt="" />
+                <p>
+                    {user.displayName}
+                </p>
+                <button onClick={props.signOut}>ログアウト</button>
+            </div>
             <div className="albums">
                 {albums.map((album) => (
                     <div className="album" key={album.id}>
@@ -34,7 +48,7 @@ const Home: React.VFC = (props: any) => {
                                 <Link to={{
                                     pathname: `/game/${game.id}`,
                                     state: { game: game }
-                                }} key={game.id+game.title}>                                    
+                                }} key={game.id + game.title}>
                                     <div className="game">
                                         <div style={{ backgroundImage: `url(${game.image})` }}></div>
                                         <span className="title">
@@ -47,7 +61,7 @@ const Home: React.VFC = (props: any) => {
                     </div>
                 ))}
             </div>
-        </div>
+        </div >
     )
 }
 

@@ -83,7 +83,7 @@ export default function App() {
         if (user) return
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                dispatch(setUser({uid: user.uid}))
+                dispatch(setUser({uid: user.uid, photoURL: user.photoURL, displayName: user.displayName}))
                 loadAlbums(user, dispatch)
             }
         })
@@ -108,22 +108,9 @@ export default function App() {
         })
     }
 
-    const W = Welcome as any
-
     return (
         <Router>
             <div>
-
-                {user ? (
-                    <button onClick={signOut}>ログアウト</button>
-                ) : (
-                    <button className="google" onClick={GoogleLogin}>
-                        Googleでログイン
-                    </button>
-                )}
-
-                {/* A <Switch> looks through its children <Route>s and
-                    renders the first one that matches the current URL. */}
                 <Switch>
                     <Route path="/photo/:id">
                         <Photo />
@@ -136,9 +123,9 @@ export default function App() {
                     </Route>
                     <Route path="/" render={() => {
                         if (user) {
-                            return <Home />
+                            return <Home signOut={signOut} />
                         } else {
-                            return <W GoogleLogin={GoogleLogin} />
+                            return <Welcome GoogleLogin={GoogleLogin} />
                         }
                      }}>
                     </Route>
