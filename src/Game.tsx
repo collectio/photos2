@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Dispatch } from 'react'
 import {withRouter} from 'react-router-dom'
 
-function Game(props: any) {
+const Game: React.VFC = (props: any) => {
     const { game } = props.location.state as any
     return (<div id="game">
         <nav>

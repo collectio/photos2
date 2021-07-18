@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectAlbums } from './store/albums'
 import { AlbumType, PhotoType, GameType } from './@types'
 
-export default function Album() {
+const Album: React.VFC = (props: any) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
     const defaultAlbum: unknown = null
     const [state, setState] = useState({
@@ -88,3 +88,5 @@ export default function Album() {
         </div>
     )
 }
+
+export default Album
