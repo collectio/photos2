@@ -6,5 +6,6 @@ export default defineConfig({
   server: {
     https: true
   },
-  plugins: [reactRefresh()]
+  plugins: [reactRefresh()],
+  publicDir: './src/assets/'
 })

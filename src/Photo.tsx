@@ -41,6 +41,7 @@ const Photo: React.VFC = (props: any) => {
         </Link> */}
         <Slider {...sliderSettings}>
         {state.album.photos.map((p: PhotoType) => {
+            // React.Fragment必須
             return (<React.Fragment>
             <div style={{backgroundImage: `url(${p.image})`}}></div>
             </React.Fragment>)
