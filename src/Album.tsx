@@ -16,11 +16,10 @@ const Album: React.VFC = (props: any) => {
     })
 
     let { id } = useParams<{ id: string }>()
-    // Similar to componentDidMount and componentDidUpdate:
     useEffect(() => {
         if (!state.album) {
-            const album = albums.filter((a) => a.id === id)[0]
-            if (album) setState({ album })
+            const alb = albums.filter((a) => a.id === id)[0]
+            if (alb) setState({ album: alb })
         }
     })
 
