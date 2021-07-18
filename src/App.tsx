@@ -30,11 +30,11 @@ import { selectUser, setUser } from './store/user'
 import { selectAlbums, addAlbums } from './store/albums'
 
 
+import Welcome from './Welcome'
 import Home from './Home'
 import Album from './Album'
 import Game from './Game'
 import Photo from './Photo'
-import Generation from './Generation'
 
 
 // サンプルのアルバム
@@ -120,20 +120,6 @@ export default function App() {
                     </button>
                 )}
 
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/about">About</Link>
-                        </li>
-                        <li>
-                            <Link to="/users">Users</Link>
-                        </li>
-                    </ul>
-                </nav>
-
                 {/* A <Switch> looks through its children <Route>s and
                     renders the first one that matches the current URL. */}
                 <Switch>
@@ -150,7 +136,7 @@ export default function App() {
                         {user ? (
                             <Home />
                         ) : (
-                            <Generation />
+                            <Welcome />
                         )}
                     </Route>
                 </Switch>

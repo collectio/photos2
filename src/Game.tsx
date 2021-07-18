@@ -6,7 +6,7 @@ const Game: React.VFC = (props: any) => {
     return (<div id="game">
         <nav>
             <a onClick={() => props.history.goBack()}>
-                <img className="logo" src="./assets/back.svg" alt="戻る" />
+                <img className="logo" src="/back.svg" alt="戻る" />
             </a>
             <span></span>
             <span></span>
