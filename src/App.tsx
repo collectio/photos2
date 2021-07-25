@@ -63,6 +63,8 @@ const loadAlbums = (user: any, dispatch: any) => {
             // console.log(doc.id, ' => ', doc.data());
             const album = doc.data() as AlbumType
             album.id = doc.id
+            // ToDo: 後で要修正
+            delete album.date
             dispatch(addAlbums(album))
         })
         // this.setGameImage()
@@ -83,12 +85,13 @@ const createAlbum = async(e: any, user: any, dispatch: any): Promise<void> => {
             const photoImage = await loadImage(file).catch((error) => console.log(error))
             if (photoImage) photoImages.push(photoImage)
         }
-        console.log(photoImages)
+        // console.log(photoImages)
         const date = new Date()
         const album: AlbumType = {
             id: '',
             title: 'ある日のボードゲーム会',
-            date: new Date(`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`),
+            // date: new Date(`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`),
+            date: new Date(),
             photos: [],
             games: [],
             userId: user.uid
