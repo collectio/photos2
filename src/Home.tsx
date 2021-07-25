@@ -1,19 +1,21 @@
 import React, { useState, useEffect, Dispatch } from 'react'
 import { Link } from 'react-router-dom'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { selectAlbums } from './store/albums'
 import { selectUser } from './store/user'
 import { AlbumType } from './@types'
 
 interface Props {
     signOut: () => void
+    createAlbum: (e:any, user:any, dispatch:any) => void
 }
 
 
 const Home: React.VFC<Props> = (props) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
     const user = useSelector(selectUser)
+    const dispatch = useDispatch()
     return (
         <div id="home">
             <nav>
@@ -60,6 +62,10 @@ const Home: React.VFC<Props> = (props) => {
                     </div>
                 ))}
             </div>
+            <form action="" encType="multipart/form-data">
+                <input className="file" onChange={(e) => props.createAlbum(e, user, dispatch)} id="file" type="file" name="file" accept="image/*" multiple={true} />
+                <label htmlFor="file"></label>
+            </form>
         </div >
     )
 }

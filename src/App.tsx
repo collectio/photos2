@@ -75,6 +75,121 @@ const loadAlbums = (user: any, dispatch: any) => {
     });
 }
 
+const createAlbum = async(e: any, user: any, dispatch: any): Promise<void> => {
+    if (e.target.files) {
+        const photoImages: string[] = [];
+        for (let i = 0; i < e.target.files.length; i++) {
+            const file = e.target.files[i]
+            const photoImage = await loadImage(file).catch((error) => console.log(error))
+            if (photoImage) photoImages.push(photoImage)
+        }
+        console.log(photoImages)
+        const date = new Date()
+        const album: AlbumType = {
+            id: '',
+            title: 'ある日のボードゲーム会',
+            date: new Date(`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`),
+            photos: [],
+            games: [],
+            userId: user.uid
+        }
+
+        const docRef = await db.collection('albums').add(album)
+            .catch((error) => {
+                console.error('Error adding document: ', error);
+            })
+        if (docRef) {
+            console.log('Document written with ID: ', docRef.id);
+            const photos: PhotoType[] = []
+            for (const photoImage of photoImages) {
+                const photoUrl = await uploadPhoto(user, docRef, photoImage).catch((error) => console.log(error))
+                if (photoUrl) {
+                    photos.push({
+                        image: photoUrl
+                    })
+                }
+            }
+            docRef.update({ id: docRef.id, photos: photos }).catch((error) => console.log(error))
+            album.id = docRef.id
+            album.photos = photos
+            dispatch(addAlbums(album))
+        }
+    }
+}
+
+
+const loadImage = (file: any): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader: any = new FileReader();
+        reader.onload = async (e: any) => {
+            resolve(await resizeImage(e.target.result))
+        }
+        reader.readAsDataURL(file)
+    })
+}
+
+const uploadPhoto = (user: any, docRef: any, photoImage: string): Promise<string> => {
+    console.log('uploadPhoto')
+    return new Promise((resolve, reject) => {
+        const storageRef = firebase.storage().ref();
+        const ref = storageRef.child(`albums/${user.uid}/${docRef.id}/${(new Date()).getTime()}.jpg`);
+        const uploadTask = ref.putString(photoImage, 'data_url')
+        uploadTask.on('state_changed', (snapshot: any) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                    console.log('Upload is paused');
+                    break;
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                    console.log('Upload is running');
+                    break;
+            }
+        }, (error) => {
+            console.log(error)
+            reject()
+        }, async () => {
+            const photoUrl = await uploadTask.snapshot.ref.getDownloadURL()
+            console.log('File available at', photoUrl);
+            resolve(photoUrl)
+        })
+    })
+
+}
+
+const resizeImage = (base64: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const MIN_SIZE = 640
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        if (ctx) {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous'
+            img.onload = (event) => {
+                const image = event.target as HTMLImageElement
+                let dstWidth, dstHeight
+                if (image.width > image.height) {
+                    dstWidth = MIN_SIZE;
+                    dstHeight = image.height * MIN_SIZE / image.width
+                } else {
+                    dstHeight = MIN_SIZE;
+                    dstWidth = image.width * MIN_SIZE / image.height
+                }
+                canvas.width = dstWidth
+                canvas.height = dstHeight
+                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, dstWidth, dstHeight)
+                resolve(canvas.toDataURL())
+            }
+            img.src = base64
+        } else {
+            reject()
+        }
+    })
+}
+
+
+
+
 export default function App() {
     const user: any = useSelector(selectUser)
     const dispatch = useDispatch()
@@ -127,7 +242,7 @@ export default function App() {
                     </Route>
                     <Route path="/" render={() => {
                         if (user) {
-                            return <Home signOut={signOut} />
+                            return <Home signOut={signOut} createAlbum={createAlbum} />
                         } else {
                             return <Welcome GoogleLogin={GoogleLogin} />
                         }
