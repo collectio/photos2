@@ -1,7 +1,7 @@
 export interface AlbumType {
     id: string
     title: string
-    date: string | Date
+    date?: string | Date
     photos: PhotoType[]
     games: GameType[]
     userId: string

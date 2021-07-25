@@ -65,8 +65,6 @@ const loadAlbums = (user: any, dispatch: any) => {
             const album = doc.data() as AlbumType
             album.id = doc.id
             // ToDo: 後で要修正
-            // ドメイン切り替え
-            // 既存のデータのdateを全てコンバート
             delete album.date
             dispatch(addAlbums(album))
         })
@@ -118,6 +116,7 @@ const createAlbum = async(e: any, user: any, dispatch: any): Promise<void> => {
             docRef.update({ id: docRef.id, photos: photos }).catch((error) => console.log(error))
             album.id = docRef.id
             album.photos = photos
+            delete album.date
             dispatch(addAlbums(album))
         }
     }
