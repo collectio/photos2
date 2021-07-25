@@ -57,7 +57,7 @@ const sampleAlbum: AlbumType = {
 
 
 const loadAlbums = (user: any, dispatch: any) => {
-    db.collection('albums').where('userId', '==', user.uid).orderBy('date').get()
+    db.collection('albums').where('userId', '==', user.uid).orderBy('date', 'desc').get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             // console.log(doc.id, ' => ', doc.data());

@@ -36,7 +36,6 @@ const ShareSelect: React.VFC = (props: any) => {
             setSelectedIndexes([...selectedIndexes])
             setSelectDisabled(false)
         }
-        
     }
 
     const share = () => {
