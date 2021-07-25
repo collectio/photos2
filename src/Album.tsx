@@ -31,9 +31,11 @@ const Album: React.VFC = (props: any) => {
                 <Link to="/">
                     <img className="logo" src="/back.svg" alt="戻る" />
                 </Link>
-                <span></span>
+                <span>
+                    <img src="/delete.svg" alt="削除" />
+                </span>
                 <span onClick={() => alert('アルバムのタイトル編集・アルバムの削除機能などがくる予定')}>
-                    <img src="/menu.svg" alt="menu" />
+                    <img src="/menu.svg" alt="メニュー" />
                 </span>
             </nav>
             <div className="album">
