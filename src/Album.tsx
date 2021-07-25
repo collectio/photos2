@@ -1,19 +1,28 @@
 import React, { useState, useEffect, Dispatch } from 'react'
 import {
+    useHistory,
     Link,
     useParams
 } from 'react-router-dom'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { selectAlbums } from './store/albums'
 import { AlbumType, PhotoType, GameType } from './@types'
 
-const Album: React.VFC = (props: any) => {
+interface Props {
+    deleteAlbum: (e:any, dispatch:any) => void
+}
+
+
+const Album: React.VFC<Props> = (props) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
     const defaultAlbum: unknown = null
     const [state, setState] = useState({
         album: defaultAlbum as AlbumType
     })
+    const dispatch = useDispatch()
+
+    const history = useHistory()
 
     let { id } = useParams<{ id: string }>()
     useEffect(() => {
@@ -31,7 +40,10 @@ const Album: React.VFC = (props: any) => {
                 <Link to="/">
                     <img className="logo" src="/back.svg" alt="戻る" />
                 </Link>
-                <span>
+                <span onClick={() => {
+                    props.deleteAlbum(state.album, dispatch)
+                    history.push('/')
+                }}>
                     <img src="/delete.svg" alt="削除" />
                 </span>
                 <span onClick={() => alert('アルバムのタイトル編集・アルバムの削除機能などがくる予定')}>

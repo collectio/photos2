@@ -27,7 +27,7 @@ import { AlbumType, PhotoType, GameType } from './@types/index';
 
 import { useSelector, useDispatch } from 'react-redux'
 import { selectUser, setUser } from './store/user'
-import { selectAlbums, addAlbums } from './store/albums'
+import { selectAlbums, addAlbums, removeAlbum } from './store/albums'
 
 
 import Welcome from './Welcome'
@@ -55,6 +55,7 @@ const sampleAlbum: AlbumType = {
     userId: ''
 }
 
+// Todo: この辺りの関数は、storeに移す？
 
 const loadAlbums = (user: any, dispatch: any) => {
     db.collection('albums').where('userId', '==', user.uid).orderBy('date', 'desc').get()
@@ -192,7 +193,12 @@ const resizeImage = (base64: string): Promise<string> => {
     })
 }
 
-
+const deleteAlbum = async(album: AlbumType, dispatch: any): Promise<void> => {
+    console.log(album)
+    const res = await db.collection('albums').doc(album.id).delete()
+    // Todo: 写真の削除
+    dispatch(removeAlbum(album.id))
+}
 
 
 export default function App() {
@@ -242,9 +248,7 @@ export default function App() {
                     <Route path="/game/:id">
                         <Game />
                     </Route>
-                    <Route path="/album/:id">
-                        <Album />
-                    </Route>
+                    <Route path="/album/:id" render={() => <Album deleteAlbum={deleteAlbum} />} />
                     <Route path="/" render={() => {
                         if (user) {
                             return <Home signOut={signOut} createAlbum={createAlbum} />
