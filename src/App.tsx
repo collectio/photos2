@@ -64,6 +64,8 @@ const loadAlbums = (user: any, dispatch: any) => {
             const album = doc.data() as AlbumType
             album.id = doc.id
             // ToDo: 後で要修正
+            // ドメイン切り替え
+            // 既存のデータのdateを全てコンバート
             delete album.date
             dispatch(addAlbums(album))
         })
@@ -80,16 +82,16 @@ const loadAlbums = (user: any, dispatch: any) => {
 const createAlbum = async(e: any, user: any, dispatch: any): Promise<void> => {
     if (e.target.files) {
         const photoImages: string[] = [];
-        for (let i = 0; i < e.target.files.length; i++) {
-            const file = e.target.files[i]
+        for (const file of e.target.files) {
             const photoImage = await loadImage(file).catch((error) => console.log(error))
             if (photoImage) photoImages.push(photoImage)
         }
         // console.log(photoImages)
-        const date = new Date()
+        // const date = new Date()
         const album: AlbumType = {
             id: '',
             title: 'ある日のボードゲーム会',
+            // https://qiita.com/yuiken/items/1a43a2a87ca421626f18
             // date: new Date(`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`),
             date: new Date(),
             photos: [],
