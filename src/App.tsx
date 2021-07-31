@@ -191,7 +191,7 @@ const degreeFromExif = async (image: any): Promise<number> => {
 }
 
 
-const drawRotated = (image: any, canvas: any, context: any, degrees: number,  dstWidth: number, dstHeight: number) => {
+const drawRotated = (image: any, canvas: any, context: any, degrees: number) => {
     let { width, height } = image
     Object.assign(context.canvas, { width, height })
     context.clearRect(0,0,canvas.width,canvas.height)
@@ -228,8 +228,7 @@ const resizeImage = (base64: string): Promise<string> => {
                 // https://blog.tsukumijima.net/article/canvas-image-orientation/
                 if (!browserImageRotationSupport()) {
                     const degree = await degreeFromExif(base64)
-                    console.log(degree)
-                    drawRotated(image, canvas, ctx, degree, dstWidth, dstHeight)
+                    drawRotated(image, canvas, ctx, degree)
                 }
                 resolve(canvas.toDataURL())
             }
