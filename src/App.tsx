@@ -79,7 +79,7 @@ const loadAlbums = (user: any, dispatch: any) => {
     });
 }
 
-const createAlbum = async(e: any, user: any, dispatch: any): Promise<void> => {
+const createAlbum = async(e: any, user: any, dispatch: any, setUploading: any): Promise<void> => {
     if (e.target.files) {
         const photoImages: string[] = [];
         for (const file of e.target.files) {
@@ -119,6 +119,7 @@ const createAlbum = async(e: any, user: any, dispatch: any): Promise<void> => {
             album.photos = photos
             delete album.date
             dispatch(addAlbums(album))
+            setUploading(false)
         }
     }
 }
@@ -203,6 +204,7 @@ const deleteAlbum = async(album: AlbumType, dispatch: any): Promise<void> => {
 
 export default function App() {
     const [loading, setLoading] = useState(true)
+    const [uploading, setUploading] = useState(false)
     const user: any = useSelector(selectUser)
     const dispatch = useDispatch()
 
@@ -254,7 +256,10 @@ export default function App() {
                     <Route path="/" render={() => {
                         if (loading) return <Loading />
                         if (user) {
-                            return <Home signOut={signOut} createAlbum={createAlbum} />
+                            return <Home uploading={uploading} signOut={signOut} createAlbum={(e, user, dispatch) => {
+                                setUploading(true)
+                                createAlbum(e, user, dispatch, setUploading)
+                            }} />
                         } else {
                             return <Welcome GoogleLogin={GoogleLogin} />
                         }

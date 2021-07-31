@@ -7,7 +7,7 @@ import { selectUser } from './store/user'
 import { AlbumType } from './@types'
 
 interface Props {
-    loading: boolean
+    uploading: boolean
     signOut: () => void
     createAlbum: (e:any, user:any, dispatch:any) => void
 }
@@ -31,6 +31,11 @@ const Home: React.VFC<Props> = (props) => {
                 </p>
                 <button onClick={props.signOut}>ログアウト</button>
             </div>
+            {props.uploading ? (
+                <div className="progress">
+                    <p>アップロード中...</p>
+                </div>
+            ) : null}
             <div className="albums">
                 {albums.map((album) => (
                     <div className="album" key={album.id}>
