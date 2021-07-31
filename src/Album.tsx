@@ -78,7 +78,7 @@ const Album: React.VFC<Props> = (props) => {
                         return <Link to={{
                             pathname: `/game/${game.id}`,
                             state: { game: game }
-                        }} key={game.id}>
+                        }} key={game.id + game.title}>
                             <div key={'game' + i} className="game">
                                 <div style={{ backgroundImage: `url(${game.image})` }}></div>
                                 <span className="title">
