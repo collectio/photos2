@@ -279,8 +279,7 @@ export default function App() {
         <Router>
             <div>
                 <Switch>
-                    <Route path="/select/:id">
-                        <Select />
+                    <Route path="/select/:id" render={() => <Select updateAlbum={updateAlbum} /> }>
                     </Route>
                     <Route path="/share/:id">
                         <ShareSelect />

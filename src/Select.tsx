@@ -7,17 +7,13 @@ import fetchJsonp from 'fetch-jsonp'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectAlbums } from './store/albums'
 
-interface Select {
-    textInput: any;
-}
-
 interface Props {
     user: any
     album: AlbumType
     albums: AlbumType[]
     game: GameType | null
     updateAlbum: (album: AlbumType) => void
-    setGame: (game: GameType) => void
+    // setGame: (game: GameType) => void
 }
 interface State {
     loading: boolean
@@ -34,16 +30,16 @@ const hiraToKana = (str: string) => {
     })
 }
 
-const Select: React.VFC = (props: any) => {
+const Select: React.VFC<Props> = (props: any) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
     const textInput = useRef(null)
-    const [index, setIndex] = useState(0)
     const [loading, setLoading] = useState(false)
     const defaultAlbum: unknown = null
     const [album, setAlbum] = useState(defaultAlbum as AlbumType)
     const [suggests, setSuggests] = useState([] as GameType[])
 
     let { id } = useParams<{ id: string }>()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         scrollTo(0, 0)
@@ -137,7 +133,7 @@ const Select: React.VFC = (props: any) => {
     }
 
     const updateAlbum = async () => {
-        props.updateAlbum(album)
+        props.updateAlbum(album, dispatch)
         props.history.push(`/album`)
     }
 
@@ -174,10 +170,7 @@ const Select: React.VFC = (props: any) => {
                 <div className="games">
                     <h3>遊んだゲーム</h3>
                     {album.games.map((game: GameType, i: number) => {
-                        return <Link to={{
-                            pathname: "/game",
-                            state: { game: game }
-                        }} key={game.id} onClick={() => props.setGame(game)}>
+                        return (
                             <div key={'game' + i} className="game">
                                 {game.image ? (
                                     <img src={game.image} alt="" />
@@ -188,7 +181,7 @@ const Select: React.VFC = (props: any) => {
                                     {game.title}
                                 </span>
                             </div>
-                        </Link>
+                        )
                     })}
                 </div>
             ) : null}

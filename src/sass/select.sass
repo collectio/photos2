@@ -76,27 +76,25 @@
             border-bottom: 1px solid #cccccc
             padding-bottom: 1rem
             margin-bottom: 0
-        a
-            display: block
-            > div
-                cursor: pointer
-                display: flex
-                align-items: center
-                padding: 0
-                font-size: 0.9rem
-                border-bottom: 1px solid #cccccc
+        > div
+            cursor: pointer
+            display: flex
+            align-items: center
+            padding: 0
+            font-size: 0.9rem
+            border-bottom: 1px solid #cccccc
+            height: 50px
+            &:hover, &:active
+                background: #cccccc
+            > img, .image
+                width: 50px
                 height: 50px
-                &:hover, &:active
-                    background: #cccccc
-                > img, .image
-                    width: 50px
-                    height: 50px
-                    object-fit: cover
-                .image
-                    background-color: #CCC
-                .title
-                    color: #666666
-                    padding: 0.75rem
+                object-fit: cover
+            .image
+                background-color: #CCC
+            .title
+                color: #666666
+                padding: 0.75rem
     .slick-slide
         background-color: #000000 
         .photo
