@@ -198,7 +198,7 @@ const drawRotated = (image: any, canvas: any, context: any, degrees: number) => 
     context.save()
     context.translate(canvas.width / 2, canvas.height / 2)
     context.rotate(degrees * Math.PI / 180)
-    context.drawImage(image, -image.width / 2, -image.width / 2)
+    context.drawImage(image, -canvas.width / 2, -canvas.width / 2)
     context.restore()
 }
 
@@ -227,6 +227,7 @@ const resizeImage = (base64: string): Promise<string> => {
                 // ブラウザがEXIFで自動的に回転してくれない場合
                 // https://blog.tsukumijima.net/article/canvas-image-orientation/
                 if (!browserImageRotationSupport()) {
+                // if (true) {
                     const degree = await degreeFromExif(base64)
                     drawRotated(image, canvas, ctx, degree)
                 }
