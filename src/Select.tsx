@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { withRouter, Link, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { AlbumType, PhotoType, GameType } from './@types/index'
 
 import fetchJsonp from 'fetch-jsonp'
@@ -40,6 +40,7 @@ const Select: React.VFC<Props> = (props: any) => {
 
     let { id } = useParams<{ id: string }>()
     const dispatch = useDispatch()
+    const history = useHistory()
 
     useEffect(() => {
         scrollTo(0, 0)
@@ -134,7 +135,7 @@ const Select: React.VFC<Props> = (props: any) => {
 
     const updateAlbum = async () => {
         props.updateAlbum(album, dispatch)
-        props.history.push(`/album`)
+        history.push(`/album`)
     }
 
     if (album === null) return null
@@ -142,7 +143,7 @@ const Select: React.VFC<Props> = (props: any) => {
     return (
         <div id="select">
             <nav>
-                <a onClick={() => props.history.goBack()}>
+                <a onClick={() => history.goBack()}>
                     <img className="logo" src="/back.svg" alt="戻る" />
                 </a>
                 {suggests.length === 0 ? (
@@ -191,4 +192,4 @@ const Select: React.VFC<Props> = (props: any) => {
     );
 }
 
-export default withRouter(Select);
+export default Select

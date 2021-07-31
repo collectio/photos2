@@ -287,6 +287,7 @@ export default function App() {
         <Router>
             <div>
                 <Switch>
+                    {/* @ts-ignore */}
                     <Route path="/select/:id" render={() => <Select updateAlbum={updateAlbum} /> }>
                     </Route>
                     <Route path="/share/:id">
