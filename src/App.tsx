@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom'
 
 import EXIF from 'exif-js'
+import exifr from 'exifr'
 
 
 import firebase from 'firebase/app'
@@ -172,37 +173,19 @@ const browserImageRotationSupport = () => {
     return imgTag.style.imageOrientation !== undefined;
 }
 
-
-const base64ToArrayBuffer = (base64: any) => {
-    base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
-    const binaryString = atob(base64);
-    const len = binaryString.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes.buffer;
-}
-
-
-const degreeFromExif = (image: any): number => {
-    const arrayBuffer = base64ToArrayBuffer(image)
-    const exif = EXIF.readFromBinaryFile(arrayBuffer)
-    // console.log(exif)
+const degreeFromExif = async (image: any): number => {
+    const orientation = await exifr.orientation(image)
     let degree = 0
-    if (exif && exif.Orientation) {
-        // console.log(exif.Orientation)
-        switch (exif.Orientation) {
-            case 3:
-                degree = 180
-                break
-            case 6:
-                degree = 90
-                break
-            case 8:
-                degree = -90
-                break
-        }
+    switch (orientation) {
+        case 3:
+            degree = 180
+            break
+        case 6:
+            degree = 90
+            break
+        case 8:
+            degree = -90
+            break
     }
     return degree
 }
@@ -250,13 +233,13 @@ const resizeImage = (base64: string): Promise<string> => {
                 }
                 canvas.width = dstWidth
                 canvas.height = dstHeight
-                // ブラウザがEXIFで自動的に回転してくれる場合
-                if (browserImageRotationSupport()) {
-                    ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, dstWidth, dstHeight)
+                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, dstWidth, dstHeight)
                 // ブラウザがEXIFで自動的に回転してくれない場合
                 // https://blog.tsukumijima.net/article/canvas-image-orientation/
-                } else {
-                    drawRotated(image, canvas, ctx, degreeFromExif(image))
+                if (!browserImageRotationSupport()) {
+                    canvas.toBlob((i) => {
+                        drawRotated(i, canvas, ctx, degreeFromExif(image.src))
+                    })
                 }
                 resolve(canvas.toDataURL())
             }
