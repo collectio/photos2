@@ -243,8 +243,6 @@ export default function App() {
                 loadAlbums(user, dispatch)
             }
             setLoading(false)
-            const newAlbums = setGameImage(albums)
-            dispatch(setAlbums(newAlbums))
         })
 
         // Specify how to clean up after this effect
