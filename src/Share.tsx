@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
-import { withRouter, RouteComponentProps, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { AlbumType, PhotoType, GameType } from './@types/index'
 
 interface Share {

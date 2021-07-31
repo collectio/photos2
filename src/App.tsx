@@ -27,7 +27,7 @@ import { AlbumType, PhotoType, GameType } from './@types/index';
 
 import { useSelector, useDispatch } from 'react-redux'
 import { selectUser, setUser } from './store/user'
-import { selectAlbums, setAlbums, unshiftAlbums, pushAlbums, removeAlbum } from './store/albums'
+import { selectAlbums, setAlbums, unshiftAlbums, pushAlbums, replaceAlbum, removeAlbum } from './store/albums'
 
 
 import Loading from './Loading'
@@ -38,6 +38,7 @@ import Game from './Game'
 import Photo from './Photo'
 import ShareSelect from './ShareSelect'
 import Share from './Share'
+import Select from './Select'
 
 
 // サンプルのアルバム
@@ -194,6 +195,14 @@ const resizeImage = (base64: string): Promise<string> => {
     })
 }
 
+const updateAlbum = async (album: AlbumType, dispatch: any): Promise<void> => {
+    const docRef = db.collection('albums').doc(album.id)
+    await docRef.update(album).then(() => {
+        dispatch(replaceAlbum(album))
+    }).catch((error) => console.log(error))
+}
+
+
 const deleteAlbum = async(album: AlbumType, dispatch: any): Promise<void> => {
     console.log(album)
     const res = await db.collection('albums').doc(album.id).delete()
@@ -270,6 +279,9 @@ export default function App() {
         <Router>
             <div>
                 <Switch>
+                    <Route path="/select/:id">
+                        <Select />
+                    </Route>
                     <Route path="/share/:id">
                         <ShareSelect />
                     </Route>

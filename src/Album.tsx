@@ -92,7 +92,7 @@ const Album: React.VFC<Props> = (props) => {
                             +
                         </a>
                     ) : (
-                        <Link to="/select" className="add">+</Link>
+                        <Link to={`/select/${id}`} className="add">+</Link>
                     )}
                     {album.games.length === 0 ? (
                         <p>遊んだゲームを追加しましょう</p>

@@ -24,6 +24,10 @@ export const albumsSlice = createSlice({
     pushAlbums: (state, action) => {
       state.albums.push(action.payload)
     },
+    replaceAlbum: (state, action) => {
+      const index = state.albums.findIndex(album => album.id === action.payload.id)
+      state.albums[index] = action.payload
+    },
     removeAlbum: (state, action) => {
       const newAlbums: AlbumType[] = []
       state.albums.forEach(album => {
@@ -36,7 +40,7 @@ export const albumsSlice = createSlice({
   },
 })
 
-export const { setAlbums, unshiftAlbums, pushAlbums, removeAlbum } = albumsSlice.actions
+export const { setAlbums, unshiftAlbums, pushAlbums, replaceAlbum, removeAlbum } = albumsSlice.actions
 
 export const selectAlbums = (state: RootState) => 
   state.albumsReducer.albums
