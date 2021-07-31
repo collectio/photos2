@@ -64,8 +64,8 @@ const ShareSelect: React.VFC = (props: any) => {
                     </div>);
                 })}
             </div>
-            <div className="bottomActions">
-                <span className="share" onClick={share}>次へ</span>
+            <div className="bottomActions" onClick={share}>
+                <span className="share">次へ</span>
             </div>
         </div>
     </div>)
