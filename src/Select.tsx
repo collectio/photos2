@@ -121,12 +121,14 @@ const Select: React.VFC = (props: any) => {
             } else {
                 suggest.image = null
             }
-            if (!album.games.some((game: GameType) => game.id === suggest.id)) {
-                album.games.push(suggest)
+            if (album.games.findIndex((g: GameType) => g.id === suggest.id) === -1) {
+                const newAlbum = Object.assign({}, album, {games: [...album.games, suggest]})
+                setAlbum(newAlbum)
             }
         } else {
-            if (!album.games.some((game: GameType) => game.title === suggest.title)) {
-                album.games.push(suggest)
+            if (album.games.findIndex((g: GameType) => g.title === suggest.title) === -1) {
+                const newAlbum = Object.assign({}, album, {games: [...album.games, suggest]})
+                setAlbum(newAlbum)
             }
         }
         setSuggests([])
@@ -145,7 +147,7 @@ const Select: React.VFC = (props: any) => {
         <div id="select">
             <nav>
                 <a onClick={() => props.history.goBack()}>
-                    <img className="logo" src="/assets/back.svg" alt="戻る" />
+                    <img className="logo" src="/back.svg" alt="戻る" />
                 </a>
                 <a onClick={() => {
                     updateAlbum()
