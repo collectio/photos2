@@ -255,6 +255,9 @@ export default function App() {
             setLoading(false)
         })
 
+        alert(browserImageRotationSupport())
+
+
         // Specify how to clean up after this effect
         return () => {
             console.log('Clean up')
@@ -273,6 +276,11 @@ export default function App() {
         }).catch((error) => {
             // An error happened.
         })
+    }
+
+    const browserImageRotationSupport = () =>{
+        let imgTag = document.createElement('img');
+        return imgTag.style.imageOrientation !== undefined;
     }
 
     return (
