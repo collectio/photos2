@@ -191,7 +191,9 @@ const degreeFromExif = async (image: any): Promise<number> => {
 }
 
 
-const drawRotated = (image: any, canvas: any, context: any, degrees: number) => {
+const drawRotated = (image: any, canvas: any, context: any, degrees: number,  dstWidth: number, dstHeight: number) => {
+    let { width, height } = image
+    Object.assign(context.canvas, { width, height })
     context.clearRect(0,0,canvas.width,canvas.height)
     context.save()
     context.translate(canvas.width / 2, canvas.height / 2)
@@ -225,10 +227,9 @@ const resizeImage = (base64: string): Promise<string> => {
                 // ブラウザがEXIFで自動的に回転してくれない場合
                 // https://blog.tsukumijima.net/article/canvas-image-orientation/
                 if (!browserImageRotationSupport()) {
-                    const degree = await degreeFromExif(image.src)
-                    canvas.toBlob((i) => {
-                        drawRotated(i, canvas, ctx, degree)
-                    })
+                    const degree = await degreeFromExif(base64)
+                    console.log(degree)
+                    drawRotated(image, canvas, ctx, degree, dstWidth, dstHeight)
                 }
                 resolve(canvas.toDataURL())
             }
