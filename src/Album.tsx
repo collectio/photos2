@@ -42,8 +42,10 @@ const Album: React.VFC<Props> = (props) => {
                 </Link>
                 <span></span>
                 <span onClick={() => {
-                    props.deleteAlbum(state.album, dispatch)
-                    history.push('/')
+                    if (confirm(`「${album.title}」を削除します。\nよろしいですか？`)) {
+                        props.deleteAlbum(state.album, dispatch)
+                        history.push('/')
+                    }
                 }}>
                     <img src="/delete.svg" alt="削除" />
                 </span>
