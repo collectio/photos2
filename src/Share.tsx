@@ -25,34 +25,6 @@ const convertFile = async (url: string) => {
     return new File([blob], 'test.jpg',{ type: blob.type })
 }
 
-const share = async (text: string, album: AlbumType, photos: PhotoType[]) => {
-    const files: File[] = []
-    for (const photo of photos) {
-        const file = await convertFile(photo.image)
-        files.push(file)
-    }
-    const titles: string[] = []
-    album.games.map((game) => {
-        if (titles.indexOf(game.title) === -1) titles.push('#' + game.title)
-    })
-    text += '\n' + titles.join(' ')
-    // console.log(text)
-    // console.log(files)
-    if (navigator.share) {
-        navigator.share({
-            text: text,
-            url: 'https://collectio.jp/',
-            files: files
-        } as ShareData).then(() => {
-            console.log('Share was successful.')
-        }).catch((error) => {
-            console.log('Sharing failed', error)
-        })
-    } else {
-        alert('このブラウザではシェア機能が使えません。\n最新のSafari, Chromeをお使いください。')
-    }
-}
-
 
 const Share: React.VFC = (props: any) => {
     const textArea = useRef(null)
@@ -78,9 +50,37 @@ const Share: React.VFC = (props: any) => {
         }
     }, [state.album, state.photos])
 
+
+    const share = async (text: string) => {
+        const files: File[] = []
+        for (const photo of state.photos) {
+            // @ts-ignore
+            const file = await convertFile(photo.image)
+            files.push(file)
+        }
+        const titles: string[] = []
+        state.album.games.forEach((game) => {
+            if (titles.indexOf(game.title) === -1) titles.push('#' + game.title)
+        })
+        text += '\n' + titles.join(' ')
+        if (navigator.share) {
+            navigator.share({
+                text: text,
+                url: 'https://collectio.jp/',
+                files: files
+            } as ShareData).then(() => {
+                console.log('Share was successful.')
+            }).catch((error) => {
+                console.log('Sharing failed', error)
+            })
+        } else {
+            alert('このブラウザではシェア機能が使えません。\n最新のSafari, Chromeをお使いください。')
+        }
+    }
+    
     const onClick = () => {
         // @ts-ignore
-        share(textArea.current.value, state.album, state.photos)
+        share(textArea.current.value)
     }
 
     if (state.album === null) return null
