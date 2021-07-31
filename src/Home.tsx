@@ -17,19 +17,6 @@ const Home: React.VFC<Props> = (props) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
     const user = useSelector(selectUser)
     const dispatch = useDispatch()
-    if (props.loading) return (
-        <div id="home">
-            <nav>
-                <Link to="/">
-                    <img className="logo" src="/collectio.svg" alt="Collectio" />
-                </Link>
-            </nav>
-
-            <div className="loading">
-                <p>読み込み中...</p>
-            </div>
-        </div>
-    )
     return (
         <div id="home">
             <nav>

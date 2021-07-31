@@ -30,6 +30,7 @@ import { selectUser, setUser } from './store/user'
 import { selectAlbums, addAlbums, removeAlbum } from './store/albums'
 
 
+import Loading from './Loading'
 import Welcome from './Welcome'
 import Home from './Home'
 import Album from './Album'
@@ -251,8 +252,9 @@ export default function App() {
                     </Route>
                     <Route path="/album/:id" render={() => <Album deleteAlbum={deleteAlbum} />} />
                     <Route path="/" render={() => {
+                        if (loading) return <Loading />
                         if (user) {
-                            return <Home loading={loading} signOut={signOut} createAlbum={createAlbum} />
+                            return <Home signOut={signOut} createAlbum={createAlbum} />
                         } else {
                             return <Welcome GoogleLogin={GoogleLogin} />
                         }
