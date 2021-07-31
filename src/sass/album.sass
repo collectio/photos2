@@ -69,14 +69,15 @@
             display: flex
             align-items: center
             flex-wrap: wrap
-            width: 95%
-            margin: 0 auto
+            width: 100%
+            margin: 0
             a
                 display: block
                 width: 25%
                 max-width: 180px
                 height: 23vw
                 max-height: 180px
+                margin: 1px
                 .game
                     position: relative
                     display: flex
@@ -124,14 +125,16 @@
 
 
         .photos
-            display: flex
-            flex-wrap: wrap
-            width: 95%
-            margin: 0.2rem auto 0
+            // display: flex
+            // flex-wrap: wrap
+            width: 100%
+            margin-top: 0.2rem
+            display: grid
+            grid-template-columns: repeat(3, 33%)
+            grid-auto-rows: 30.5vw
+            column-gap: 1px
+            row-gap: 1px
             a
-                display: block
-                width: 33.3%
-                height: 30.5vw
                 .photo
                     position: relative
                     width: 100%
