@@ -40,15 +40,16 @@ const Album: React.VFC<Props> = (props) => {
                 <Link to="/">
                     <img className="logo" src="/back.svg" alt="戻る" />
                 </Link>
+                <span></span>
                 <span onClick={() => {
                     props.deleteAlbum(state.album, dispatch)
                     history.push('/')
                 }}>
                     <img src="/delete.svg" alt="削除" />
                 </span>
-                <span onClick={() => alert('アルバムのタイトル編集・アルバムの削除機能などがくる予定')}>
+                {/* <span onClick={() => alert('アルバムのタイトル編集・アルバムの削除機能などがくる予定')}>
                     <img src="/menu.svg" alt="メニュー" />
-                </span>
+                </span> */}
             </nav>
             <div className="album">
                 <div className="hero">

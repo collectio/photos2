@@ -201,6 +201,7 @@ const deleteAlbum = async(album: AlbumType, dispatch: any): Promise<void> => {
 
 
 export default function App() {
+    const [loading, setLoading] = useState(true)
     const user: any = useSelector(selectUser)
     const dispatch = useDispatch()
 
@@ -212,6 +213,7 @@ export default function App() {
                 dispatch(setUser({uid: user.uid, photoURL: user.photoURL, displayName: user.displayName}))
                 loadAlbums(user, dispatch)
             }
+            setLoading(false)
         })
 
         // Specify how to clean up after this effect
@@ -250,7 +252,7 @@ export default function App() {
                     <Route path="/album/:id" render={() => <Album deleteAlbum={deleteAlbum} />} />
                     <Route path="/" render={() => {
                         if (user) {
-                            return <Home signOut={signOut} createAlbum={createAlbum} />
+                            return <Home loading={loading} signOut={signOut} createAlbum={createAlbum} />
                         } else {
                             return <Welcome GoogleLogin={GoogleLogin} />
                         }
