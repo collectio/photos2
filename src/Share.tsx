@@ -55,7 +55,7 @@ const share = async (text: string, album: AlbumType, photos: PhotoType[]) => {
 
 
 const Share: React.VFC = (props: any) => {
-    const textArea = useRef({value: ''})
+    const textArea = useRef(null)
     const [state, setState] = useState({
         album: {} as AlbumType,
         photos: []
@@ -79,9 +79,8 @@ const Share: React.VFC = (props: any) => {
     }, [state.album, state.photos])
 
     const onClick = () => {
-        if (textArea!==null && textArea.current!==null) {
-            share(textArea.current.value, state.album, state.photos)
-        }
+        // @ts-ignore
+        share(textArea.current.value, state.album, state.photos)
     }
 
     if (state.album === null) return null

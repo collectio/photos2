@@ -1,7 +1,7 @@
 {
   "version": "0.0.0",
   "scripts": {
-    "start": "vite --open",
+    "start": "vite --open --host",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "firestore": "firebase emulators:start",
