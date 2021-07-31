@@ -209,7 +209,7 @@ const resizeImage = (base64: string): Promise<string> => {
         if (ctx) {
             const img = new Image();
             img.crossOrigin = 'Anonymous'
-            img.onload = (event) => {
+            img.onload = async (event) => {
                 const image = event.target as HTMLImageElement
                 let dstWidth, dstHeight
                 if (image.width > image.height) {
@@ -225,8 +225,9 @@ const resizeImage = (base64: string): Promise<string> => {
                 // ブラウザがEXIFで自動的に回転してくれない場合
                 // https://blog.tsukumijima.net/article/canvas-image-orientation/
                 if (!browserImageRotationSupport()) {
+                    const degree = await degreeFromExif(image.src)
                     canvas.toBlob((i) => {
-                        drawRotated(i, canvas, ctx, degreeFromExif(image.src))
+                        drawRotated(i, canvas, ctx, degree)
                     })
                 }
                 resolve(canvas.toDataURL())
