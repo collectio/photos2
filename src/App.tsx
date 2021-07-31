@@ -6,6 +6,8 @@ import {
     Link
 } from 'react-router-dom'
 
+import EXIF from 'exif-js'
+
 
 import firebase from 'firebase/app'
 import 'firebase/analytics'
@@ -62,25 +64,25 @@ const sampleAlbum: AlbumType = {
 
 const loadAlbums = (user: any, dispatch: any) => {
     db.collection('albums').where('userId', '==', user.uid).orderBy('date', 'desc').get()
-    .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            // console.log(doc.id, ' => ', doc.data());
-            const album = doc.data() as AlbumType
-            album.id = doc.id
-            // ToDo: 後で要修正
-            delete album.date
-            dispatch(pushAlbums(album))
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                // console.log(doc.id, ' => ', doc.data());
+                const album = doc.data() as AlbumType
+                album.id = doc.id
+                // ToDo: 後で要修正
+                delete album.date
+                dispatch(pushAlbums(album))
+            })
+            if (querySnapshot.empty) {
+                dispatch(pushAlbums(sampleAlbum))
+            }
         })
-        if (querySnapshot.empty) {
-            dispatch(pushAlbums(sampleAlbum))
-        }
-    })
-    .catch((error) => {
-        console.log('Error getting documents: ', error);
-    });
+        .catch((error) => {
+            console.log('Error getting documents: ', error);
+        });
 }
 
-const createAlbum = async(e: any, user: any, dispatch: any, setUploading: any): Promise<void> => {
+const createAlbum = async (e: any, user: any, dispatch: any, setUploading: any): Promise<void> => {
     if (e.target.files) {
         const photoImages: string[] = [];
         for (const file of e.target.files) {
@@ -165,6 +167,69 @@ const uploadPhoto = (user: any, docRef: any, photoImage: string): Promise<string
 
 }
 
+const browserImageRotationSupport = () => {
+    let imgTag = document.createElement('img');
+    return imgTag.style.imageOrientation !== undefined;
+}
+
+
+const base64ToArrayBuffer = (base64: any) => {
+    base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
+    const binaryString = atob(base64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
+
+const degreeFromExif = (image: any): number => {
+    const arrayBuffer = base64ToArrayBuffer(image)
+    const exif = EXIF.readFromBinaryFile(arrayBuffer)
+    // console.log(exif)
+    let degree = 0
+    if (exif && exif.Orientation) {
+        // console.log(exif.Orientation)
+        switch (exif.Orientation) {
+            case 3:
+                degree = 180
+                break
+            case 6:
+                degree = 90
+                break
+            case 8:
+                degree = -90
+                break
+        }
+    }
+    return degree
+}
+
+
+const drawRotated = (image: any, canvas: any, context: any, degrees: number) => {
+    context.clearRect(0,0,canvas.width,canvas.height);
+
+    // save the unrotated context of the canvas so we can restore it later
+    // the alternative is to untranslate & unrotate after drawing
+    context.save();
+
+    // move to the center of the canvas
+    context.translate(canvas.width / 2, canvas.height / 2);
+
+    // rotate the canvas to the specified degrees
+    context.rotate(degrees * Math.PI / 180);
+
+    // draw the image
+    // since the context is rotated, the image will be rotated also
+    context.drawImage(image, -image.width / 2, -image.width / 2);
+
+    // we’re done with the rotating so restore the unrotated context
+    context.restore();
+}
+
+
 const resizeImage = (base64: string): Promise<string> => {
     return new Promise((resolve, reject) => {
         const MIN_SIZE = 640
@@ -185,7 +250,14 @@ const resizeImage = (base64: string): Promise<string> => {
                 }
                 canvas.width = dstWidth
                 canvas.height = dstHeight
-                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, dstWidth, dstHeight)
+                // ブラウザがEXIFで自動的に回転してくれる場合
+                if (browserImageRotationSupport()) {
+                    ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, dstWidth, dstHeight)
+                // ブラウザがEXIFで自動的に回転してくれない場合
+                // https://blog.tsukumijima.net/article/canvas-image-orientation/
+                } else {
+                    drawRotated(image, canvas, ctx, degreeFromExif(image))
+                }
                 resolve(canvas.toDataURL())
             }
             img.src = base64
@@ -203,7 +275,7 @@ const updateAlbum = async (album: AlbumType, dispatch: any): Promise<void> => {
 }
 
 
-const deleteAlbum = async(album: AlbumType, dispatch: any): Promise<void> => {
+const deleteAlbum = async (album: AlbumType, dispatch: any): Promise<void> => {
     console.log(album)
     const res = await db.collection('albums').doc(album.id).delete()
     // Todo: 写真の削除
@@ -215,7 +287,7 @@ const setGameImage = async (albums: AlbumType[]): Promise<AlbumType[]> => {
     let ids: number[] = []
     albums.forEach((album) => {
         album.games.forEach((game: GameType) => {
-            if(game.id) ids.push(parseInt(game.id))
+            if (game.id) ids.push(parseInt(game.id))
         })
     })
     ids = Array.from(new Set(ids))
@@ -249,14 +321,11 @@ export default function App() {
         if (user) return
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                dispatch(setUser({uid: user.uid, photoURL: user.photoURL, displayName: user.displayName}))
+                dispatch(setUser({ uid: user.uid, photoURL: user.photoURL, displayName: user.displayName }))
                 loadAlbums(user, dispatch)
             }
             setLoading(false)
         })
-
-        alert(browserImageRotationSupport())
-
 
         // Specify how to clean up after this effect
         return () => {
@@ -278,17 +347,12 @@ export default function App() {
         })
     }
 
-    const browserImageRotationSupport = () =>{
-        let imgTag = document.createElement('img');
-        return imgTag.style.imageOrientation !== undefined;
-    }
-
     return (
         <Router>
             <div>
                 <Switch>
                     {/* @ts-ignore */}
-                    <Route path="/select/:id" render={() => <Select updateAlbum={updateAlbum} /> }>
+                    <Route path="/select/:id" render={() => <Select updateAlbum={updateAlbum} />}>
                     </Route>
                     <Route path="/share/:id">
                         <ShareSelect />
@@ -313,7 +377,7 @@ export default function App() {
                         } else {
                             return <Welcome GoogleLogin={GoogleLogin} />
                         }
-                     }}>
+                    }}>
                     </Route>
                 </Switch>
             </div>
