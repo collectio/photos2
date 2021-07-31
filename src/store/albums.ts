@@ -15,6 +15,9 @@ export const albumsSlice = createSlice({
   name: 'albums',
   initialState,
   reducers: {
+    setAlbums: (state, action) => {
+      state.albums = action.payload
+    },
     unshiftAlbums: (state, action) => {
       state.albums.unshift(action.payload)
     },
@@ -33,7 +36,7 @@ export const albumsSlice = createSlice({
   },
 })
 
-export const { unshiftAlbums, pushAlbums, removeAlbum } = albumsSlice.actions
+export const { setAlbums, unshiftAlbums, pushAlbums, removeAlbum } = albumsSlice.actions
 
 export const selectAlbums = (state: RootState) => 
   state.albumsReducer.albums

@@ -27,7 +27,7 @@ import { AlbumType, PhotoType, GameType } from './@types/index';
 
 import { useSelector, useDispatch } from 'react-redux'
 import { selectUser, setUser } from './store/user'
-import { selectAlbums, unshiftAlbums, pushAlbums, removeAlbum } from './store/albums'
+import { selectAlbums, setAlbums, unshiftAlbums, pushAlbums, removeAlbum } from './store/albums'
 
 
 import Loading from './Loading'
@@ -69,7 +69,6 @@ const loadAlbums = (user: any, dispatch: any) => {
             delete album.date
             dispatch(pushAlbums(album))
         })
-        // this.setGameImage()
         if (querySnapshot.empty) {
             dispatch(pushAlbums(sampleAlbum))
         }
@@ -201,11 +200,38 @@ const deleteAlbum = async(album: AlbumType, dispatch: any): Promise<void> => {
     dispatch(removeAlbum(album.id))
 }
 
+// ゲーム画像を最新のものにする
+const setGameImage = async (albums: AlbumType[]): Promise<AlbumType[]> => {
+    let ids: number[] = []
+    albums.forEach((album) => {
+        album.games.forEach((game: GameType) => {
+            if(game.id) ids.push(parseInt(game.id))
+        })
+    })
+    ids = Array.from(new Set(ids))
+    const url = 'https://db.collectio.jp/wp-json/wp/v2/posts?include=' + ids.join(',')
+    const games = await fetch(url).then(r => r.json())
+    // console.log(games)
+    albums.forEach((album) => {
+        album.games.forEach((g: GameType) => {
+            games.map((game: any) => {
+                // console.log(game.featured_image.src)
+                if (game.featured_image.src !== 'https://db.collectio.jp/wp-includes/images/media/default.png') {
+                    if (g.id == game.id) {
+                        g.image = game.featured_image.src
+                    }
+                }
+            })
+        })
+    })
+    return albums
+}
 
 export default function App() {
     const [loading, setLoading] = useState(true)
     const [uploading, setUploading] = useState(false)
     const user: any = useSelector(selectUser)
+    const albums: any = useSelector(selectAlbums)
     const dispatch = useDispatch()
 
     // Similar to componentDidMount and componentDidUpdate:
@@ -217,6 +243,8 @@ export default function App() {
                 loadAlbums(user, dispatch)
             }
             setLoading(false)
+            const newAlbums = setGameImage(albums)
+            dispatch(setAlbums(newAlbums))
         })
 
         // Specify how to clean up after this effect
