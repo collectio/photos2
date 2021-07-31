@@ -27,7 +27,7 @@ import { AlbumType, PhotoType, GameType } from './@types/index';
 
 import { useSelector, useDispatch } from 'react-redux'
 import { selectUser, setUser } from './store/user'
-import { selectAlbums, addAlbums, removeAlbum } from './store/albums'
+import { selectAlbums, unshiftAlbums, pushAlbums, removeAlbum } from './store/albums'
 
 
 import Loading from './Loading'
@@ -67,11 +67,11 @@ const loadAlbums = (user: any, dispatch: any) => {
             album.id = doc.id
             // ToDo: 後で要修正
             delete album.date
-            dispatch(addAlbums(album))
+            dispatch(pushAlbums(album))
         })
         // this.setGameImage()
         if (querySnapshot.empty) {
-            dispatch(addAlbums(sampleAlbum))
+            dispatch(pushAlbums(sampleAlbum))
         }
     })
     .catch((error) => {
@@ -118,7 +118,7 @@ const createAlbum = async(e: any, user: any, dispatch: any, setUploading: any): 
             album.id = docRef.id
             album.photos = photos
             delete album.date
-            dispatch(addAlbums(album))
+            dispatch(unshiftAlbums(album))
             setUploading(false)
         }
     }
