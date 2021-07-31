@@ -339,7 +339,8 @@ export default function App() {
                     <Route path="/game/:id">
                         <Game />
                     </Route>
-                    <Route path="/album/:id" render={() => <Album deleteAlbum={deleteAlbum} />} />
+                    {/* @ts-ignore */}
+                    <Route path="/album/:id" render={() => <Album updateAlbum={updateAlbum} deleteAlbum={deleteAlbum} />} />
                     <Route path="/" render={() => {
                         if (loading) return <Loading />
                         if (user) {

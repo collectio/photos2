@@ -10,6 +10,7 @@ import { selectAlbums } from './store/albums'
 import { AlbumType, PhotoType, GameType } from './@types'
 
 interface Props {
+    updateAlbum: (album: AlbumType, dispatch:any) => void
     deleteAlbum: (e:any, dispatch:any) => void
 }
 
@@ -41,13 +42,26 @@ const Album: React.VFC<Props> = (props) => {
                     <img className="logo" src="/back.svg" alt="戻る" />
                 </Link>
                 <span></span>
-                <span onClick={() => {
-                    if (confirm(`「${album.title}」を削除します。\nよろしいですか？`)) {
-                        props.deleteAlbum(state.album, dispatch)
-                        history.push('/')
-                    }
-                }}>
-                    <img src="/delete.svg" alt="削除" />
+                <span className="menu">
+                    <span onClick={() => {
+                        const title = prompt('アルバムのタイトルを変更', '')
+                        if (title) {
+                            // @ts-ignore
+                            const newAlbum = Object.assign({}, album, { title })
+                            setState({ album: newAlbum })
+                            props.updateAlbum(newAlbum, dispatch)
+                        }
+                    }}>
+                        <img src="/edit.svg" alt="編集" />
+                    </span>
+                    <span onClick={() => {
+                        if (confirm(`「${album.title}」を削除します。\nよろしいですか？`)) {
+                            props.deleteAlbum(state.album, dispatch)
+                            history.push('/')
+                        }
+                    }}>
+                        <img src="/delete.svg" alt="削除" />
+                    </span>
                 </span>
                 {/* <span onClick={() => alert('アルバムのタイトル編集・アルバムの削除機能などがくる予定')}>
                     <img src="/menu.svg" alt="メニュー" />

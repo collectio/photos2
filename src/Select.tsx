@@ -12,7 +12,7 @@ interface Props {
     album: AlbumType
     albums: AlbumType[]
     game: GameType | null
-    updateAlbum: (album: AlbumType) => void
+    updateAlbum: (album: AlbumType, dispatch:any) => void
     // setGame: (game: GameType) => void
 }
 interface State {
