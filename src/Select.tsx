@@ -84,11 +84,11 @@ const Select: React.VFC<Props> = (props: any) => {
         return suggests;
     }
     const suggest = async (query: string) => {
-        const s = await fetchJsonp(
+        const result = await fetchJsonp(
             'https://www.google.com/complete/search?hl=ja&client=firefox&q=' + encodeURIComponent(query)
         ).then((r) => r.json());
         const suggests: any[] = [];
-        s[1].map((suggest: string) => {
+        result[1].map((suggest: string) => {
             const data = {
                 id: null,
                 title: suggest,
@@ -97,13 +97,13 @@ const Select: React.VFC<Props> = (props: any) => {
             suggests.push(data)
         })
         // 見つからなかった場合、検索キーワードを出す
-        if (suggests.length === 0) {
+        if (suggests.length === 0 || suggests.findIndex((s) => query === s.title) === -1) {
             const suggest: any = {
                 id: null,
                 title: query,
                 image: null
             }
-            suggests.push(suggest)
+            suggests.unshift(suggest)
         }
         return suggests
     }
@@ -118,12 +118,12 @@ const Select: React.VFC<Props> = (props: any) => {
                 suggest.image = null
             }
             if (album.games.findIndex((g: GameType) => g.id === suggest.id) === -1) {
-                const newAlbum = Object.assign({}, album, {games: [...album.games, suggest]})
+                const newAlbum = Object.assign({}, album, { games: [...album.games, suggest] })
                 setAlbum(newAlbum)
             }
         } else {
             if (album.games.findIndex((g: GameType) => g.title === suggest.title) === -1) {
-                const newAlbum = Object.assign({}, album, {games: [...album.games, suggest]})
+                const newAlbum = Object.assign({}, album, { games: [...album.games, suggest] })
                 setAlbum(newAlbum)
             }
         }
@@ -137,7 +137,7 @@ const Select: React.VFC<Props> = (props: any) => {
         props.history.push(`/album`)
     }
 
-    if (album===null) return null
+    if (album === null) return null
 
     return (
         <div id="select">
@@ -145,11 +145,13 @@ const Select: React.VFC<Props> = (props: any) => {
                 <a onClick={() => props.history.goBack()}>
                     <img className="logo" src="/back.svg" alt="戻る" />
                 </a>
-                <a onClick={() => {
-                    updateAlbum()
-                }}>
-                    完了
-                </a>
+                {suggests.length === 0 ? (
+                    <a onClick={() => {
+                        updateAlbum()
+                    }}>
+                        完了
+                    </a>
+                ) : null}
             </nav>
             <form action="" onSubmit={onSearch.bind(this)}>
                 <div className="bg">
