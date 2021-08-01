@@ -6,7 +6,6 @@ import {
     Link
 } from 'react-router-dom'
 
-import EXIF from 'exif-js'
 import exifr from 'exifr'
 
 
@@ -171,35 +170,6 @@ const uploadPhoto = (user: any, docRef: any, photoImage: string): Promise<string
 const browserImageRotationSupport = () => {
     let imgTag = document.createElement('img');
     return imgTag.style.imageOrientation !== undefined;
-}
-
-const degreeFromExif = async (image: any): Promise<number> => {
-    const orientation = await exifr.orientation(image)
-    let degree = 0
-    switch (orientation) {
-        case 3:
-            degree = 180
-            break
-        case 6:
-            degree = 90
-            break
-        case 8:
-            degree = -90
-            break
-    }
-    return degree
-}
-
-
-const drawRotated = (image: any, canvas: any, context: any, degrees: number) => {
-    let { width, height } = image
-    Object.assign(context.canvas, { width, height })
-    context.clearRect(0, 0, canvas.width, canvas.height)
-    context.save()
-    context.translate(canvas.width / 2, canvas.height / 2)
-    context.rotate(degrees * Math.PI / 180)
-    context.drawImage(image, -canvas.width / 2, -canvas.width / 2)
-    context.restore()
 }
 
 const clearOrientation = (img: any, orientaion: number) => {
