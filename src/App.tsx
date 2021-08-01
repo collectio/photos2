@@ -194,12 +194,47 @@ const degreeFromExif = async (image: any): Promise<number> => {
 const drawRotated = (image: any, canvas: any, context: any, degrees: number) => {
     let { width, height } = image
     Object.assign(context.canvas, { width, height })
-    context.clearRect(0,0,canvas.width,canvas.height)
+    context.clearRect(0, 0, canvas.width, canvas.height)
     context.save()
     context.translate(canvas.width / 2, canvas.height / 2)
     context.rotate(degrees * Math.PI / 180)
     context.drawImage(image, -canvas.width / 2, -canvas.width / 2)
     context.restore()
+}
+
+const clearOrientation = (img: any, orientaion: number) => {
+    var canvas = document.createElement('canvas')
+    var ctx = canvas.getContext('2d')
+    if (ctx) {
+        switch (orientaion) {
+            case 3: // 画像が１８０度回転している時
+                canvas.width = img.width
+                canvas.height = img.height
+                ctx.rotate(Math.PI)
+                ctx.drawImage(img, -img.width, -img.height)
+                ctx.rotate(-Math.PI)
+                break
+            case 6: // 画像が時計回りに９０度回っている時
+                canvas.width = img.height
+                canvas.height = img.width
+                ctx.rotate(Math.PI * 0.5)
+                ctx.drawImage(img, 0, -img.height)
+                ctx.rotate(-Math.PI * 0.5)
+                break
+            case 8: // 画像が反時計回りに９０度回っている時
+                canvas.width = img.height
+                canvas.height = img.width
+                ctx.rotate(-Math.PI * 0.5)
+                ctx.drawImage(img, -img.width, 0)
+                ctx.rotate(Math.PI * 0.5)
+                break
+            default:
+                canvas.width = img.width
+                canvas.height = img.height
+                ctx.drawImage(img, 0, 0)
+        }
+        return canvas.toDataURL('image/jpeg')
+    }
 }
 
 
@@ -226,12 +261,16 @@ const resizeImage = (base64: string): Promise<string> => {
                 ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, dstWidth, dstHeight)
                 // ブラウザがEXIFで自動的に回転してくれない場合
                 // https://blog.tsukumijima.net/article/canvas-image-orientation/
-                if (!browserImageRotationSupport()) {
-                // if (true) {
+                // if (!browserImageRotationSupport()) {
+                if (true) {
                     const degree = await degreeFromExif(base64)
-                    drawRotated(image, canvas, ctx, degree)
+                    // drawRotated(image, canvas, ctx, degree)
+                    const clearImage = clearOrientation(image, degree)
+                    // @ts-ignore
+                    resolve(clearImage)
+                } else {
+                    resolve(canvas.toDataURL())
                 }
-                resolve(canvas.toDataURL())
             }
             img.src = base64
         } else {
