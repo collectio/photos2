@@ -233,7 +233,7 @@ const clearOrientation = (img: any, orientaion: number) => {
                 canvas.height = img.height
                 ctx.drawImage(img, 0, 0)
         }
-        return canvas.toDataURL('image/jpeg')
+        return canvas.toDataURL()
     }
 }
 
@@ -263,9 +263,10 @@ const resizeImage = (base64: string): Promise<string> => {
                 // https://blog.tsukumijima.net/article/canvas-image-orientation/
                 if (!browserImageRotationSupport()) {
                 // if (true) {
-                    const degree = await degreeFromExif(base64)
+                    // const degree = await degreeFromExif(base64)
+                    const orientation = await exifr.orientation(base64)
                     // drawRotated(image, canvas, ctx, degree)
-                    const clearImage = clearOrientation(image, degree)
+                    const clearImage = clearOrientation(image, orientation)
                     // @ts-ignore
                     resolve(clearImage)
                 } else {
