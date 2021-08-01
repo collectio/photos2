@@ -266,6 +266,7 @@ const resizeImage = (base64: string): Promise<string> => {
                     // const degree = await degreeFromExif(base64)
                     const orientation = await exifr.orientation(base64)
                     // drawRotated(image, canvas, ctx, degree)
+                    // @ts-ignore
                     const clearImage = clearOrientation(image, orientation)
                     // @ts-ignore
                     resolve(clearImage)
