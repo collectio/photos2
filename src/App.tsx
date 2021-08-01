@@ -261,8 +261,8 @@ const resizeImage = (base64: string): Promise<string> => {
                 ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, dstWidth, dstHeight)
                 // ブラウザがEXIFで自動的に回転してくれない場合
                 // https://blog.tsukumijima.net/article/canvas-image-orientation/
-                // if (!browserImageRotationSupport()) {
-                if (true) {
+                if (!browserImageRotationSupport()) {
+                // if (true) {
                     const degree = await degreeFromExif(base64)
                     // drawRotated(image, canvas, ctx, degree)
                     const clearImage = clearOrientation(image, degree)
