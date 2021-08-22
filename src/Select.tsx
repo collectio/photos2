@@ -42,6 +42,8 @@ const Select: React.VFC<Props> = (props: any) => {
     const dispatch = useDispatch()
     const history = useHistory()
 
+    let prevQuery = ''
+
     useEffect(() => {
         scrollTo(0, 0)
         if (!album) {
@@ -52,13 +54,16 @@ const Select: React.VFC<Props> = (props: any) => {
         if (textInput.current) textInput.current.focus()
         // インスタンスを立ち上げておく
         fetch('https://db-api-mxiq5qapta-an.a.run.app/search')
-    })
+    }, [albums])
 
     const onSearch = async (event: any) => {
         event.preventDefault();
         // @ts-ignore
         const query = textInput.current.value;
         if (query === '') return setSuggests([])
+        console.log(query)
+        if (query === prevQuery) return
+        prevQuery = query
         let games = await search(query)
         setLoading(true)
         if (games.length === 0) {
@@ -67,7 +72,7 @@ const Select: React.VFC<Props> = (props: any) => {
             setLoading(false)
             setSuggests(games)
         }
-        if (games.length <= 5) {
+        if (games.length <= 0) {
             const suggests = await suggest(query)
             games = games.concat(suggests)
         }
@@ -154,7 +159,7 @@ const Select: React.VFC<Props> = (props: any) => {
                     </a>
                 ) : null}
             </nav>
-            <form action="" onSubmit={onSearch.bind(this)}>
+            <form action="" onSubmit={onSearch}>
                 <div className="bg">
                     <input type="text" ref={textInput} placeholder="ゲームを検索" onChange={onSearch} />
                 </div>

@@ -63,18 +63,23 @@ const sampleAlbum: AlbumType = {
 // Todo: この辺りの関数は、storeに移す？
 
 const loadAlbums = (user: any, dispatch: any) => {
+    let albums: AlbumType[] = []
     db.collection('albums').where('userId', '==', user.uid).orderBy('date', 'desc').get()
-        .then((querySnapshot) => {
+        .then(async(querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 // console.log(doc.id, ' => ', doc.data());
                 const album = doc.data() as AlbumType
                 album.id = doc.id
                 // ToDo: 後で要修正
                 delete album.date
-                dispatch(pushAlbums(album))
+                albums.push(album)
+                // dispatch(pushAlbums(album))
             })
             if (querySnapshot.empty) {
                 dispatch(pushAlbums(sampleAlbum))
+            } else {
+                albums = await setGameImage(albums)
+                dispatch(setAlbums(albums))
             }
         })
         .catch((error) => {
@@ -276,8 +281,8 @@ const setGameImage = async (albums: AlbumType[]): Promise<AlbumType[]> => {
     })
     ids = Array.from(new Set(ids))
     const url = 'https://db.collectio.jp/wp-json/wp/v2/posts?include=' + ids.join(',')
+    console.log(url)
     const games = await fetch(url).then(r => r.json())
-    // console.log(games)
     albums.forEach((album) => {
         album.games.forEach((g: GameType) => {
             games.map((game: any) => {
