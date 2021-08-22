@@ -61,7 +61,6 @@ const Select: React.VFC<Props> = (props: any) => {
         // @ts-ignore
         const query = textInput.current.value;
         if (query === '') return setSuggests([])
-        console.log(query)
         if (query === prevQuery) return
         prevQuery = query
         let games = await search(query)
