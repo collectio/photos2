@@ -3,6 +3,16 @@ import {withRouter} from 'react-router-dom'
 
 const Game: React.VFC = (props: any) => {
     const { game } = props.location.state as any
+    const [amazonURL, setAmazonURL] = useState('')
+    useEffect(() => {
+        // console.log('game', game)
+        if (game.id) {
+            const url = 'https://db.collectio.jp/wp-json/wp/v2/posts/' + game.id
+            fetch(url).then(r => r.json()).then(r => {
+                if(r.acf.amazon) setAmazonURL(r.acf.amazon)
+            })
+        }
+    }, [])
     return (<div id="game">
         <nav>
             <a onClick={() => props.history.goBack()}>
@@ -28,7 +38,11 @@ const Game: React.VFC = (props: any) => {
                 </p>
             ) : null}
             <div className="links">
-                <a href={`https://www.amazon.co.jp/s?k=` + encodeURIComponent(game.title)} className="amazon" target="_blank">Amazonで探す</a>
+                {amazonURL === '' ? (
+                    <a href={`https://www.amazon.co.jp/s?k=` + encodeURIComponent(game.title)} className="amazon" target="_blank">Amazonで探す</a>
+                ) : (
+                    <a href={amazonURL} className="amazon" target="_blank">Amazonで見る</a>
+                )}
                 {game.bodogema ? (
                     <a href={game.bodogema} className="bodogema" target="_blank">ボドゲーマ</a>
                 ) : null}
