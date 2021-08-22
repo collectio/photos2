@@ -39,7 +39,7 @@ const Game: React.VFC = (props: any) => {
             ) : null}
             <div className="links">
                 {amazonURL === '' ? (
-                    <a href={`https://www.amazon.co.jp/s?k=` + encodeURIComponent(game.title)} className="amazon" target="_blank">Amazonで探す</a>
+                    <a href={`https://www.amazon.co.jp/s?i=toys&k=` + encodeURIComponent(game.title)} className="amazon" target="_blank">Amazonで探す</a>
                 ) : (
                     <a href={amazonURL} className="amazon" target="_blank">Amazonで見る</a>
                 )}
