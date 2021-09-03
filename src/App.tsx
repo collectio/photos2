@@ -25,6 +25,8 @@ export const db = firebase.firestore()
 export const storage = firebase.storage()
 export const analytics = firebase.analytics()
 
+declare let window: any;
+
 import { AlbumType, PhotoType, GameType } from './@types/index';
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -65,7 +67,7 @@ const sampleAlbum: AlbumType = {
 const loadAlbums = (user: any, dispatch: any) => {
     let albums: AlbumType[] = []
     db.collection('albums').where('userId', '==', user.uid).orderBy('date', 'desc').get()
-        .then(async(querySnapshot) => {
+        .then(async (querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 // console.log(doc.id, ' => ', doc.data());
                 const album = doc.data() as AlbumType
@@ -237,7 +239,7 @@ const resizeImage = (base64: string): Promise<string> => {
                 // ブラウザがEXIFで自動的に回転してくれない場合
                 // https://blog.tsukumijima.net/article/canvas-image-orientation/
                 if (!browserImageRotationSupport()) {
-                // if (true) {
+                    // if (true) {
                     // const degree = await degreeFromExif(base64)
                     const orientation = await exifr.orientation(base64)
                     // drawRotated(image, canvas, ctx, degree)
@@ -323,8 +325,31 @@ export default function App() {
     })
 
     const GoogleLogin = () => {
-        const provider = new firebase.auth.GoogleAuthProvider()
-        firebase.auth().signInWithRedirect(provider)
+        if (window.cordova) {
+            let config = {}
+            if (window.cordova.platformId !== 'ios') {
+                config = {
+                    // 'scopes': '',
+                    'webClientId': '16919798390-lk4015gr64659nv1norrteeb7o7l40ah.apps.googleusercontent.com',
+                    'offline': false
+                }
+            }
+            // console.log(config)
+            window.plugins.googleplus.login(config,
+                (authData: any) => {
+                    // console.log(authData)
+                    let credential = (new firebase.auth.GoogleAuthProvider()).credential(authData.idToken)
+                    // console.log(credential)
+                    firebase.auth().signInWithCredential(credential)
+                },
+                (msg: any) => {
+                    console.log('error: ' + msg)
+                }
+            )
+        } else {
+            const provider = new firebase.auth.GoogleAuthProvider()
+            firebase.auth().signInWithRedirect(provider)
+        }
     }
 
     const signOut = () => {
