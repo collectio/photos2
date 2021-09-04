@@ -32,6 +32,7 @@ const start = () => {
 
 const params: any = getQueryString();
 if (params['cordova'] === 'true') {
+  alert('アプリのテストバージョンです')
   document.addEventListener('deviceready', start, false)
 } else {
   start()
