@@ -14,6 +14,11 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         404: resolve(__dirname, '404.html'),
+      },
+      output: {
+        entryFileNames: `assets/[name].js`,
+        chunkFileNames: `assets/[name].js`,
+        assetFileNames: `assets/[name].[ext]`
       }
     }
   }
