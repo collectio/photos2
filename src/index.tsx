@@ -17,16 +17,23 @@ function getQueryString() {
 
 declare let window: any;
 
+
+const start = () => {
+  ReactDOM.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+  )
+  
+}
+
 const params: any = getQueryString();
 if (params['cordova'] === 'true') {
   window.cordova = true
+  document.addEventListener('deviceready', start, false)
+} else {
+  start()
 }
-
-ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-)
