@@ -1,10 +1,18 @@
 import React, { useState, useEffect, Dispatch } from 'react'
 import {
-    BrowserRouter as Router,
+    BrowserRouter,
+    HashRouter,
     Switch,
     Route,
     Link
 } from 'react-router-dom'
+
+let Router = BrowserRouter
+if (window.cordova) {
+    Router = HashRouter
+} else {
+    Router = BrowserRouter
+}
 
 import exifr from 'exifr'
 
