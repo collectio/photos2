@@ -338,6 +338,7 @@ export default function App() {
             window.plugins.googleplus.login(config,
                 (authData: any) => {
                     // console.log(authData)
+                    // @ts-ignore
                     let credential = (new firebase.auth.GoogleAuthProvider()).credential(authData.idToken)
                     // console.log(credential)
                     firebase.auth().signInWithCredential(credential)
