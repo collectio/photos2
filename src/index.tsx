@@ -32,7 +32,6 @@ const start = () => {
 
 const params: any = getQueryString();
 if (params['cordova'] === 'true') {
-  window.cordova = true
   document.addEventListener('deviceready', start, false)
 } else {
   start()
