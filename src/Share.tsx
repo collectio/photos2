@@ -49,46 +49,25 @@ const Share: React.VFC = (props: any) => {
     }, [state.album, state.photos])
 
 
-    const toBase64Url = (url: string, callback: (base64: string) => {}) => {
-      var xhr = new XMLHttpRequest();
-      xhr.onload = function() {
-        var reader = new FileReader();
-        reader.onloadend = function() {
-          //@ts-ignore
-          callback(reader.result);
-        }
-        reader.readAsDataURL(xhr.response);
-      };
-      xhr.open('GET', url);
-      xhr.responseType = 'blob';
-      xhr.send();
-    }
-
     const share = async () => {
         const files: File[] = []
         for (const photo of state.photos) {
-            // // @ts-ignore
-            // const file = await convertFile(photo.image, Math.floor(Math.random() * 10))
-            // files.push(file)
             // @ts-ignore
-            console.log(photo.image)
-            // @ts-ignore
-            toBase64Url(photo.image, (base64) => {
-                console.log(base64)
-                if (navigator.share) {
-                    navigator.share({
-                        text: base64,
-                        url: 'https://collectio.jp/',
-                        files: files
-                    } as ShareData).then(() => {
-                        console.log('Share was successful.')
-                    }).catch((error) => {
-                        console.log('Sharing failed', error)
-                    })
-                } else {
-                    alert('このブラウザではシェア機能が使えません。\n最新のSafari, Chromeをお使いください。')
-                }  
+            const file = await convertFile(photo.image, Math.floor(Math.random() * 10))
+            files.push(file)
+        }
+        if (navigator.share) {
+            navigator.share({
+                // text: text,
+                url: 'https://collectio.jp/',
+                files: files
+            } as ShareData).then(() => {
+                console.log('Share was successful.')
+            }).catch((error) => {
+                console.log('Sharing failed', error)
             })
+        } else {
+            alert('このブラウザではシェア機能が使えません。\n最新のSafari, Chromeをお使いください。')
         }
     }   
 
