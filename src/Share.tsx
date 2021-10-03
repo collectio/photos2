@@ -67,13 +67,13 @@ const Share: React.VFC = (props: any) => {
     const share = async () => {
         const files: File[] = []
         for (const photo of state.photos) {
-            // @ts-ignore
-            const file = await convertFile(photo.image, Math.floor(Math.random() * 10))
-            files.push(file)
+            // // @ts-ignore
+            // const file = await convertFile(photo.image, Math.floor(Math.random() * 10))
+            // files.push(file)
             // @ts-ignore
             console.log(photo.image)
             // @ts-ignore
-            convertFile(photo.image, (base64) => {
+            toBase64Url(photo.image, (base64) => {
                 console.log(base64)
                 if (navigator.share) {
                     navigator.share({
