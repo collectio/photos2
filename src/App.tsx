@@ -142,7 +142,7 @@ const createAlbum = async (e: any, user: any, dispatch: any, setUploading: any):
     }
 }
 
-const addPhotos = async (e: any, user: any, album: any, dispatch: any): Promise<void> => {
+const addPhotos = async (e: any, user: any, album: any, dispatch: any): Promise<PhotoType[]> => {
     return new Promise(async (resolve, reject) => {
         if (e.target.files) {
             const photoImages: string[] = [];
@@ -166,7 +166,6 @@ const addPhotos = async (e: any, user: any, album: any, dispatch: any): Promise<
                 docRef.update({ photos: photos }).catch((error) => console.log(error))
                 const updatedAlbum: AlbumType = Object.assign({}, album, { photos: photos })
                 dispatch(replaceAlbum(updatedAlbum))
-                // @ts-ignore
                 resolve(photos)
             }).catch((error) => reject(error))
         }
