@@ -7,34 +7,33 @@ import {
 
 import { useSelector, useDispatch } from 'react-redux'
 import { selectAlbums } from './store/albums'
+import { selectUser } from './store/user'
 import { AlbumType, PhotoType, GameType } from './@types'
 
 interface Props {
     updateAlbum: (album: AlbumType, dispatch:any) => void
+    addPhotos: (e: any, user: any, album: any, dispatch: any) => void
     deleteAlbum: (e:any, dispatch:any) => void
 }
 
 
 const Album: React.VFC<Props> = (props) => {
-    const albums: AlbumType[] = useSelector(selectAlbums)
     const defaultAlbum: unknown = null
-    const [state, setState] = useState({
-        album: defaultAlbum as AlbumType
-    })
+    const [album, setAlbum] = useState(defaultAlbum as AlbumType)
     const dispatch = useDispatch()
 
     const history = useHistory()
 
     let { id } = useParams<{ id: string }>()
-    useEffect(() => {
-        if (!state.album) {
-            const alb = albums.filter((a) => a.id === id)[0]
-            if (alb) setState({ album: alb })
-        }
-    })
+    const albums: AlbumType[] = useSelector(selectAlbums)
+    if (!album) {
+        const alb = albums.find((a) => a.id === id)
+        if (alb) setAlbum(alb)
+    }
 
-    if (!state.album) return null
-    const album = state.album
+    const user = useSelector(selectUser)
+
+    if (album===null) return null
     return (
         <div id="album">
             <nav>
@@ -48,7 +47,7 @@ const Album: React.VFC<Props> = (props) => {
                         if (title) {
                             // @ts-ignore
                             const newAlbum = Object.assign({}, album, { title })
-                            setState({ album: newAlbum })
+                            setAlbum(newAlbum)
                             props.updateAlbum(newAlbum, dispatch)
                         }
                     }}>
@@ -56,7 +55,7 @@ const Album: React.VFC<Props> = (props) => {
                     </span>
                     <span onClick={() => {
                         if (confirm(`「${album.title}」を削除します。\nよろしいですか？`)) {
-                            props.deleteAlbum(state.album, dispatch)
+                            props.deleteAlbum(album, dispatch)
                             history.push('/')
                         }
                     }}>
@@ -71,7 +70,9 @@ const Album: React.VFC<Props> = (props) => {
                 <div className="hero">
                     <h4>{album.title}</h4>
                     <span>{album.date}</span>
-                    <div className="cover" style={{ backgroundImage: `url(${album.photos[0].image})` }}></div>
+                    {album.photos && album.photos.length > 0 ? (
+                        <div className="cover" style={{ backgroundImage: `url(${album.photos[0].image})` }}></div>
+                    ) : null}
                 </div>
                 <div className="actions">
                     <h4>遊んだゲーム</h4>
@@ -123,6 +124,14 @@ const Album: React.VFC<Props> = (props) => {
                     })}
                 </div>
             </div>
+            <form action="" encType="multipart/form-data">
+                <input className="file" title="写真選択" onChange={async (e) => {
+                    const photos = await props.addPhotos(e, user, album, dispatch)
+                    const updatedAlbum = Object.assign({}, album, {photos: photos})
+                    setAlbum(updatedAlbum)
+                }} id="file" type="file" name="file" accept="image/*" multiple={true} />
+                <label htmlFor="file"></label>
+            </form>
         </div>
     )
 }

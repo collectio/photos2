@@ -142,6 +142,37 @@ const createAlbum = async (e: any, user: any, dispatch: any, setUploading: any):
     }
 }
 
+const addPhotos = async (e: any, user: any, album: any, dispatch: any): Promise<void> => {
+    return new Promise(async (resolve, reject) => {
+        if (e.target.files) {
+            const photoImages: string[] = [];
+            for (const file of e.target.files) {
+                const photoImage = await loadImage(file).catch((error) => console.log(error))
+                if (photoImage) photoImages.push(photoImage)
+            }
+
+            const docRef = db.collection('albums').doc(album.id)
+            await docRef.update(album).then(async () => {
+                console.log('Document written with ID: ', docRef.id);
+                const photos: PhotoType[] = [].concat(album.photos)
+                for (const photoImage of photoImages) {
+                    const photoUrl = await uploadPhoto(user, docRef, photoImage).catch((error) => console.log(error))
+                    if (photoUrl) {
+                        photos.push({
+                            image: photoUrl
+                        })
+                    }
+                }
+                docRef.update({ photos: photos }).catch((error) => console.log(error))
+                const updatedAlbum: AlbumType = Object.assign({}, album, { photos: photos })
+                dispatch(replaceAlbum(updatedAlbum))
+                // @ts-ignore
+                resolve(photos)
+            }).catch((error) => reject(error))
+        }
+    })
+}
+
 
 const loadImage = (file: any): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -390,7 +421,7 @@ export default function App() {
                         <Game />
                     </Route>
                     {/* @ts-ignore */}
-                    <Route path="/album/:id" render={() => <Album updateAlbum={updateAlbum} deleteAlbum={deleteAlbum} />} />
+                    <Route path="/album/:id" render={() => <Album updateAlbum={updateAlbum} addPhotos={addPhotos} deleteAlbum={deleteAlbum} />} />
                     <Route path="/" render={() => {
                         if (loading) return <Loading />
                         if (user) {
