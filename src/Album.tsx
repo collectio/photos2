@@ -12,7 +12,7 @@ import { AlbumType, PhotoType, GameType } from './@types'
 
 interface Props {
     updateAlbum: (album: AlbumType, dispatch:any) => void
-    addPhotos: (e: any, user: any, album: any, dispatch: any) => void
+    addPhotos: (e: any, user: any, album: any, dispatch: any, onEnd: any) => void
     deleteAlbum: (e:any, dispatch:any) => void
 }
 
@@ -125,10 +125,12 @@ const Album: React.VFC<Props> = (props) => {
                 </div>
             </div>
             <form action="" encType="multipart/form-data">
-                <input className="file" title="写真選択" onChange={async (e) => {
-                    const photos = await props.addPhotos(e, user, album, dispatch)
-                    const updatedAlbum = Object.assign({}, album, {photos: photos})
-                    setAlbum(updatedAlbum)
+                <input className="file" title="写真選択" onChange={(e) => {
+                    props.addPhotos(e, user, album, dispatch, (photos: PhotoType[]) => {
+                        const updatedAlbum = Object.assign({}, album, {photos: photos})
+                        setAlbum(updatedAlbum)
+                    })
+                    
                 }} id="file" type="file" name="file" accept="image/*" multiple={true} />
                 <label htmlFor="file"></label>
             </form>
