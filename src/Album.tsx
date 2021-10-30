@@ -13,7 +13,7 @@ import { AlbumType, PhotoType, GameType } from './@types'
 interface Props {
     updateAlbum: (album: AlbumType, dispatch:any) => void
     addPhotos: (e: any, user: any, album: any, dispatch: any, onEnd: any) => void
-    deletePhotos: (user: any, album: any, photos:PhotoType[], onEnd: any) => void
+    deletePhotos: (user: any, album: any, dispatch: any, photos:PhotoType[], onEnd: any) => void
     deleteAlbum: (e:any, dispatch:any) => void
 }
 
@@ -21,6 +21,9 @@ interface Props {
 const Album: React.VFC<Props> = (props) => {
     const defaultAlbum: unknown = null
     const [album, setAlbum] = useState(defaultAlbum as AlbumType)
+    const [editMode, setEditMode] = useState(false)
+    const defaultPhotos: PhotoType[] = []
+    const [selectedPhotos, setSelectedPhotos] = useState(defaultPhotos)
     const dispatch = useDispatch()
 
     const history = useHistory()
@@ -114,23 +117,49 @@ const Album: React.VFC<Props> = (props) => {
                         <p>遊んだゲームを追加しましょう</p>
                     ) : null}
                 </div>
+                <button　onClick={() => {
+                    setEditMode(!editMode)
+                }}>写真の編集</button>
                 <div className="photos">
                     {album.photos.map((photo: PhotoType, index: number) => {
-                        return (<Link to={{
-                            pathname: `/photo/${album.id}`,
-                            state: { album: album, index: index }
-                        }} key={photo.image}>
-                            <div className="photo" style={{ backgroundImage: `url(${photo.image})` }}></div>
-                        </Link>);
+                        if (editMode) {
+                            const isSelected = selectedPhotos.find((p) => p.image===photo.image) !== undefined
+                            return (<div key={photo.image} className={'photo'} style={{ backgroundImage: `url(${photo.image})` }} onClick={() => {
+                                if (isSelected) {
+                                    const newPhotos = selectedPhotos.filter((p) => p.image!==photo.image)
+                                    setSelectedPhotos(newPhotos)
+                                } else {
+                                    setSelectedPhotos([...selectedPhotos, photo])
+                                }
+                            }}>
+                                <span className={'select' + (isSelected ? ' selected' : '')}></span>
+                            </div>);
+                        } else {
+                            return (<Link to={{
+                                pathname: `/photo/${album.id}`,
+                                state: { album: album, index: index }
+                            }} key={photo.image}>
+                                <div className="photo" style={{ backgroundImage: `url(${photo.image})` }}></div>
+                            </Link>);
+                        }
                     })}
                 </div>
             </div>
-            <form action="" encType="multipart/form-data">
-                <input className="file" title="写真選択" onChange={(e) => {
-                    props.addPhotos(e, user, album, dispatch, (updatedAlbum: AlbumType) => setAlbum(updatedAlbum))                    
-                }} id="file" type="file" name="file" accept="image/*" multiple={true} />
-                <label htmlFor="file"></label>
-            </form>
+            {editMode ? (
+                <div className="delete" onClick={() => props.deletePhotos(user, album, dispatch, selectedPhotos, (updatedAlbum: AlbumType) => {
+                    setAlbum(updatedAlbum)
+                    setEditMode(false)
+                })}>
+                    削除
+                </div>
+            ) : (
+                <form action="" encType="multipart/form-data">
+                    <input className="file" title="写真選択" onChange={(e) => {
+                        props.addPhotos(e, user, album, dispatch, (updatedAlbum: AlbumType) => setAlbum(updatedAlbum))                    
+                    }} id="file" type="file" name="file" accept="image/*" multiple={true} />
+                    <label htmlFor="file"></label>
+                </form>
+            )}
         </div>
     )
 }

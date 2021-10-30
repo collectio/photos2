@@ -233,8 +233,11 @@ const deletePhotos = async (user: any, album: any, dispatch:any, deletePhotos: P
     }
     const newPhotos: PhotoType[] = []
     for (const photo of album.photos) {
-        if (!deletePhotos.find((p) => p.image != photo.image) && !newPhotos.find((p) => p.image != photo.image)) newPhotos.push(photo)
+        const isNoExist = deletePhotos.find((p) => p.image===photo.image)===undefined && newPhotos.find((p) => p.image===photo.image)===undefined
+        if (isNoExist) newPhotos.push(photo)
     }
+    const docRef = db.collection('albums').doc(album.id)
+    await docRef.update({ photos: newPhotos }).catch((error) => console.log(error))
     const updatedAlbum: AlbumType = Object.assign({}, album, { photos: newPhotos })
     dispatch(replaceAlbum(updatedAlbum))
     onEnd(updatedAlbum)
