@@ -165,7 +165,7 @@ const addPhotos = async (e: any, user: any, album: any, dispatch: any, onEnd: an
             docRef.update({ photos: photos }).catch((error) => console.log(error))
             const updatedAlbum: AlbumType = Object.assign({}, album, { photos: photos })
             dispatch(replaceAlbum(updatedAlbum))
-            onEnd(photos)
+            onEnd(updatedAlbum)
         }).catch((error) => console.log(error))
     }
 }
@@ -208,6 +208,36 @@ const uploadPhoto = (user: any, docRef: any, photoImage: string): Promise<string
         })
     })
 
+}
+
+const deletePhoto = (user: any, album: any, photo: any): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        const docRef = db.collection('albums').doc(album.id)
+        const storageRef = firebase.storage().ref();
+        const url = photo.image
+        const filename = url.split('?')[0].split('%2F')[3]
+        const ref = storageRef.child(`albums/${user.uid}/${docRef.id}/${filename}`);
+        ref.delete().then(() => {
+            console.log('File deleted');
+            resolve()
+        }).catch((error) => {
+            console.log(error)
+            reject()
+        })
+    })
+}
+
+const deletePhotos = async (user: any, album: any, dispatch:any, deletePhotos: PhotoType[], onEnd: any): Promise<void> => {
+    for (const photo of deletePhotos) {
+        await deletePhoto(user, album, photo).catch((error) => console.log(error))
+    }
+    const newPhotos: PhotoType[] = []
+    for (const photo of album.photos) {
+        if (!deletePhotos.find((p) => p.image != photo.image) && !newPhotos.find((p) => p.image != photo.image)) newPhotos.push(photo)
+    }
+    const updatedAlbum: AlbumType = Object.assign({}, album, { photos: newPhotos })
+    dispatch(replaceAlbum(updatedAlbum))
+    onEnd(updatedAlbum)
 }
 
 const browserImageRotationSupport = () => {
@@ -418,7 +448,7 @@ export default function App() {
                         <Game />
                     </Route>
                     {/* @ts-ignore */}
-                    <Route path="/album/:id" render={() => <Album updateAlbum={updateAlbum} addPhotos={addPhotos} deleteAlbum={deleteAlbum} />} />
+                    <Route path="/album/:id" render={() => <Album updateAlbum={updateAlbum} addPhotos={addPhotos} deletePhotos={deletePhotos} deleteAlbum={deleteAlbum} />} />
                     <Route path="/" render={() => {
                         if (loading) return <Loading />
                         if (user) {
