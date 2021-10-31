@@ -161,7 +161,9 @@ const Album: React.VFC<Props> = (props) => {
                 </div>
             </div>
             {editMode ? (
-                <div className="delete" onClick={() => props.deletePhotos(user, album, dispatch, selectedPhotos)}>
+                <div className="delete" onClick={() => {
+                    if (selectedPhotos.length > 0) props.deletePhotos(user, album, dispatch, selectedPhotos)
+                }}>
                     
                     {selectedPhotos.length > 0 ? 
                         <>
