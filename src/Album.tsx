@@ -25,8 +25,9 @@ const Album: React.VFC<Props> = (props) => {
     const [editMode, setEditMode] = useState(false)
     const defaultPhotos: PhotoType[] = []
     const [selectedPhotos, setSelectedPhotos] = useState(defaultPhotos)
-    const dispatch = useDispatch()
+    const [loadingPhotoCount, setLoadingPhotoCount] = useState(0)
 
+    const dispatch = useDispatch()
     const history = useHistory()
 
     let { id } = useParams<{ id: string }>()
@@ -41,6 +42,7 @@ const Album: React.VFC<Props> = (props) => {
         const alb = albums.find((a) => a.id === id)
         if (alb) setAlbum(alb)
         setEditMode(false)
+        setLoadingPhotoCount(0)
     }, [albums])
 
     const user = useSelector(selectUser)
@@ -158,6 +160,9 @@ const Album: React.VFC<Props> = (props) => {
                             </Link>);
                         }
                     })}
+                    {Array.from({length: loadingPhotoCount}).map((count, i) => {
+                        return <div className="photo loading" key={i}></div>
+                    })}
                 </div>
             </div>
             {editMode ? (
@@ -175,7 +180,10 @@ const Album: React.VFC<Props> = (props) => {
             ) : (
                 <form action="" encType="multipart/form-data">
                     <input className="file" title="写真選択" onChange={(e) => {
-                        props.addPhotos(e, user, album, dispatch)                    
+                        props.addPhotos(e, user, album, dispatch)
+                        if (e.target.files) {
+                            setLoadingPhotoCount(e.target.files.length)
+                        }
                     }} id="file" type="file" name="file" accept="image/*" multiple={true} />
                     <label htmlFor="file"></label>
                 </form>
