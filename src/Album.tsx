@@ -41,7 +41,9 @@ const Album: React.VFC<Props> = (props) => {
     useEffect(() => {
         const alb = albums.find((a) => a.id === id)
         if (alb) setAlbum(alb)
+        // 各stateをリセットする
         setEditMode(false)
+        setSelectedPhotos(defaultPhotos)
         setLoadingPhotoCount(0)
     }, [albums])
 
