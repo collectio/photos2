@@ -117,9 +117,16 @@ const Album: React.VFC<Props> = (props) => {
                         <p>遊んだゲームを追加しましょう</p>
                     ) : null}
                 </div>
-                <button　onClick={() => {
-                    setEditMode(!editMode)
-                }}>写真の編集</button>
+                <div className="tabs">
+                    <span className={editMode ? '' : ' active'} onClick={() => {
+                        setEditMode(false)
+                    }}>写真</span>
+                    <span className={editMode ? ' active' : ''} onClick={() => {
+                        setEditMode(true)
+                    }}>
+                        <img src={editMode ? '/edit-white.svg' : '/edit-gray.svg'} alt="編集" />編集
+                    </span>
+                </div>
                 <div className="photos">
                     {album.photos.map((photo: PhotoType, index: number) => {
                         if (editMode) {
@@ -150,6 +157,7 @@ const Album: React.VFC<Props> = (props) => {
                     setAlbum(updatedAlbum)
                     setEditMode(false)
                 })}>
+                    <img src="/delete-white.svg" alt="" />
                     削除
                 </div>
             ) : (

@@ -124,7 +124,30 @@
                 font-size: 0.9rem
                 margin-left: 1rem
 
-
+        .tabs
+            display: flex
+            margin-left: 0.5rem
+            border-bottom: 1px solid #999999
+            overflow: hidden
+            margin-top: 1rem
+            span
+                display: inline-flex
+                justify-content: center
+                align-items: center
+                width: 6rem
+                padding: 0.5rem
+                color: #666666
+                border-top: 1px solid #999999
+                border-left: 1px solid #999999
+                border-right: 1px solid #999999
+                border-top-left-radius: 10px
+                border-top-right-radius: 10px
+                &.active
+                    background-color: #999999
+                    color: #ffffff
+                img
+                    width: 1.5rem
+                    margin-right: 0.25rem
         .photos
             width: calc(100% - 1rem)
             margin: 0.2rem 0.5rem
@@ -200,18 +223,19 @@
             background-repeat: no-repeat
     .delete
         position: fixed
-        right: 2rem
-        bottom: 2rem
+        bottom: 0
         z-index: 10000000
+        cursor: pointer
+        width: 100%
         display: flex
         justify-content: center
         align-items: center
         color: #ffffff
-        width: 78px
+        font-size: 1.25rem
         height: 78px
         background-color: #1A73E8
-        border-radius: 50px
-        filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.56))
         // background-image: url(/plus.svg)
         background-position: center center
         background-repeat: no-repeat
+        img
+            margin-right: 0.5rem
