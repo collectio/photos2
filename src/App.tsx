@@ -142,7 +142,7 @@ const createAlbum = async (e: any, user: any, dispatch: any, setUploading: any):
     }
 }
 
-const addPhotos = async (e: any, user: any, album: any, dispatch: any, onEnd: any): Promise<void> => {
+const addPhotos = async (e: any, user: any, album: any, dispatch: any): Promise<void> => {
     if (e.target.files) {
         const photoImages: string[] = [];
         for (const file of e.target.files) {
@@ -165,7 +165,6 @@ const addPhotos = async (e: any, user: any, album: any, dispatch: any, onEnd: an
             docRef.update({ photos: photos }).catch((error) => console.log(error))
             const updatedAlbum: AlbumType = Object.assign({}, album, { photos: photos })
             dispatch(replaceAlbum(updatedAlbum))
-            onEnd(updatedAlbum)
         }).catch((error) => console.log(error))
     }
 }
@@ -227,7 +226,7 @@ const deletePhoto = (user: any, album: any, photo: any): Promise<void> => {
     })
 }
 
-const deletePhotos = async (user: any, album: any, dispatch:any, deletePhotos: PhotoType[], onEnd: any): Promise<void> => {
+const deletePhotos = async (user: any, album: any, dispatch:any, deletePhotos: PhotoType[]): Promise<void> => {
     for (const photo of deletePhotos) {
         await deletePhoto(user, album, photo).catch((error) => console.log(error))
     }
@@ -240,7 +239,6 @@ const deletePhotos = async (user: any, album: any, dispatch:any, deletePhotos: P
     await docRef.update({ photos: newPhotos }).catch((error) => console.log(error))
     const updatedAlbum: AlbumType = Object.assign({}, album, { photos: newPhotos })
     dispatch(replaceAlbum(updatedAlbum))
-    onEnd(updatedAlbum)
 }
 
 const browserImageRotationSupport = () => {

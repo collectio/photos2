@@ -12,13 +12,14 @@ import { AlbumType, PhotoType, GameType } from './@types'
 
 interface Props {
     updateAlbum: (album: AlbumType, dispatch:any) => void
-    addPhotos: (e: any, user: any, album: any, dispatch: any, onEnd: any) => void
-    deletePhotos: (user: any, album: any, dispatch: any, photos:PhotoType[], onEnd: any) => void
+    addPhotos: (e: any, user: any, album: any, dispatch: any) => void
+    deletePhotos: (user: any, album: any, dispatch: any, photos:PhotoType[]) => void
     deleteAlbum: (e:any, dispatch:any) => void
 }
 
 
 const Album: React.VFC<Props> = (props) => {
+    const albums: AlbumType[] = useSelector(selectAlbums)
     const defaultAlbum: unknown = null
     const [album, setAlbum] = useState(defaultAlbum as AlbumType)
     const [editMode, setEditMode] = useState(false)
@@ -29,11 +30,18 @@ const Album: React.VFC<Props> = (props) => {
     const history = useHistory()
 
     let { id } = useParams<{ id: string }>()
-    const albums: AlbumType[] = useSelector(selectAlbums)
-    if (!album) {
+    useEffect(() => {
+        if (!album) {
+            const alb = albums.find((a) => a.id === id)
+            if (alb) setAlbum(alb)
+        }
+    }, [])
+
+    useEffect(() => {
         const alb = albums.find((a) => a.id === id)
         if (alb) setAlbum(alb)
-    }
+        setEditMode(false)
+    }, [albums])
 
     const user = useSelector(selectUser)
 
@@ -153,17 +161,14 @@ const Album: React.VFC<Props> = (props) => {
                 </div>
             </div>
             {editMode ? (
-                <div className="delete" onClick={() => props.deletePhotos(user, album, dispatch, selectedPhotos, (updatedAlbum: AlbumType) => {
-                    setAlbum(updatedAlbum)
-                    setEditMode(false)
-                })}>
+                <div className="delete" onClick={() => props.deletePhotos(user, album, dispatch, selectedPhotos)}>
                     <img src="/delete-white.svg" alt="" />
                     削除
                 </div>
             ) : (
                 <form action="" encType="multipart/form-data">
                     <input className="file" title="写真選択" onChange={(e) => {
-                        props.addPhotos(e, user, album, dispatch, (updatedAlbum: AlbumType) => setAlbum(updatedAlbum))                    
+                        props.addPhotos(e, user, album, dispatch)                    
                     }} id="file" type="file" name="file" accept="image/*" multiple={true} />
                     <label htmlFor="file"></label>
                 </form>
