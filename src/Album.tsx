@@ -162,8 +162,13 @@ const Album: React.VFC<Props> = (props) => {
             </div>
             {editMode ? (
                 <div className="delete" onClick={() => props.deletePhotos(user, album, dispatch, selectedPhotos)}>
-                    <img src="/delete-white.svg" alt="" />
-                    削除
+                    
+                    {selectedPhotos.length > 0 ? 
+                        <>
+                            <img src="/delete-white.svg" alt="" />
+                            {selectedPhotos.length + '枚の写真を削除'}
+                        </>
+                    : '写真を選択してください'}
                 </div>
             ) : (
                 <form action="" encType="multipart/form-data">
