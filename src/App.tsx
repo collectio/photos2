@@ -277,7 +277,7 @@ const clearOrientation = (img: any, orientaion: number) => {
                 canvas.height = img.height
                 ctx.drawImage(img, 0, 0)
         }
-        return canvas.toDataURL()
+        return canvas.toDataURL('image/jpeg', 0.8)
     }
 }
 
@@ -315,7 +315,7 @@ const resizeImage = (base64: string): Promise<string> => {
                     // @ts-ignore
                     resolve(clearImage)
                 } else {
-                    resolve(canvas.toDataURL())
+                    resolve(canvas.toDataURL('image/jpeg', 0.8))
                 }
             }
             img.src = base64
