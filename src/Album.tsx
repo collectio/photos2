@@ -60,17 +60,6 @@ const Album: React.VFC<Props> = (props) => {
                 <span></span>
                 <span className="menu">
                     <span onClick={() => {
-                        const title = prompt('アルバムのタイトルを変更', album.title===DEFAULT_ALBUM_TITLE ? '' : album.title)
-                        if (title) {
-                            // @ts-ignore
-                            const newAlbum = Object.assign({}, album, { title })
-                            setAlbum(newAlbum)
-                            props.updateAlbum(newAlbum, dispatch)
-                        }
-                    }}>
-                        <img src="/edit.svg" alt="編集" />
-                    </span>
-                    <span onClick={() => {
                         if (confirm(`「${album.title}」を削除します。\nよろしいですか？`)) {
                             props.deleteAlbum(album, dispatch)
                             history.push('/')
@@ -85,7 +74,20 @@ const Album: React.VFC<Props> = (props) => {
             </nav>
             <div className="album">
                 <div className="hero">
-                    <h4>{album.title}</h4>
+                    <h4 onClick={() => {
+                            const title = prompt('アルバムのタイトルを変更', album.title===DEFAULT_ALBUM_TITLE ? '' : album.title)
+                            if (title) {
+                                // @ts-ignore
+                                const newAlbum = Object.assign({}, album, { title })
+                                setAlbum(newAlbum)
+                                props.updateAlbum(newAlbum, dispatch)
+                            }
+                        }}>
+                        {album.title}
+                        <span>
+                            <img src="/edit.svg" alt="編集" />
+                        </span>
+                    </h4>
                     <span>{album.date}</span>
                     {album.photos && album.photos.length > 0 ? (
                         <div className="cover" style={{ backgroundImage: `url(${album.photos[0].image})` }}></div>
