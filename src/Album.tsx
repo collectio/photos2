@@ -85,7 +85,7 @@ const Album: React.VFC<Props> = (props) => {
                         }}>
                         {album.title}
                         <span>
-                            <img src="/edit.svg" alt="編集" />
+                            <img src="/edit-white.svg" alt="編集" />
                         </span>
                     </h4>
                     <span>{album.date}</span>
