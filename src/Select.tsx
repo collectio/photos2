@@ -146,7 +146,7 @@ const Select: React.VFC<Props> = (props: any) => {
 
     const updateAlbum = async () => {
         props.updateAlbum(album, dispatch)
-        history.push(`/album`)
+        history.push(`/album/${album.id}`)
     }
 
     if (album === null) return null
