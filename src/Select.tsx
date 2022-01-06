@@ -65,11 +65,13 @@ const Select: React.VFC<Props> = (props: any) => {
         prevQuery = query
         let games = await search(query)
         setLoading(true)
-        if (games.length === 0) {
-            games = await search(hiraToKana(query))
-        } else {
+        if (games.length > 0) {
             setLoading(false)
             setSuggests(games)
+        } else {
+            if (hiraToKana(query) !== query) {
+                games = await search(hiraToKana(query))
+            }
         }
         if (games.length <= 0) {
             const suggests = await suggest(query)
@@ -137,6 +139,11 @@ const Select: React.VFC<Props> = (props: any) => {
         textInput.current.value = ''
     }
 
+    const removeGame = (game: GameType) => {
+        const newAlbum = Object.assign({}, album, { games: album.games.filter((g: GameType) => g.id !== game.id) })
+        setStateAlbum(newAlbum)
+    }
+
     const updateAlbum = async () => {
         props.updateAlbum(album, dispatch)
         history.push(`/album`)
@@ -188,6 +195,7 @@ const Select: React.VFC<Props> = (props: any) => {
                                     {game.title}
                                 </span>
                                 <span className="delete" onClick={() => {
+                                    removeGame(game)
                                 }}>
                                     <img src="/delete.svg" alt="削除" />
                                 </span>
