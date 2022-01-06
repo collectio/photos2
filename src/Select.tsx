@@ -140,7 +140,7 @@ const Select: React.VFC<Props> = (props: any) => {
     }
 
     const removeGame = (game: GameType) => {
-        const newAlbum = Object.assign({}, album, { games: album.games.filter((g: GameType) => g.id !== game.id) })
+        const newAlbum = Object.assign({}, album, { games: album.games.filter((g: GameType) => g.id !== game.id || (g.id==null && g.title !== game.title)) })
         setStateAlbum(newAlbum)
     }
 
@@ -191,13 +191,15 @@ const Select: React.VFC<Props> = (props: any) => {
                                 ) : (
                                     <span className="image"></span>
                                 )}
-                                <span className="title">
-                                    {game.title}
-                                </span>
-                                <span className="delete" onClick={() => {
-                                    removeGame(game)
-                                }}>
-                                    <img src="/delete.svg" alt="削除" />
+                                <span className="data">
+                                    <span className="title">
+                                        {game.title}
+                                    </span>
+                                    <span className="delete" onClick={() => {
+                                        removeGame(game)
+                                    }}>
+                                        <img src="/delete.svg" alt="削除" />
+                                    </span>
                                 </span>
                             </div>
                         )
