@@ -24,7 +24,6 @@ const Home: React.VFC<Props> = (props) => {
                     <img className="logo" src="/collectio.svg" alt="Collectio" />
                 </Link>
             </nav>
-            <a href="https://www.ugtop.com/spill.shtml">確認くん</a>
             <div className="profile">
                 <img src={user.photoURL} alt="" />
                 <p>
