@@ -17,6 +17,7 @@ interface Props {
     deleteAlbum: (e:any, dispatch:any) => void
 }
 
+import {DEFAULT_ALBUM_TITLE} from './App'
 
 const Album: React.VFC<Props> = (props) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
@@ -59,7 +60,7 @@ const Album: React.VFC<Props> = (props) => {
                 <span></span>
                 <span className="menu">
                     <span onClick={() => {
-                        const title = prompt('アルバムのタイトルを変更', '')
+                        const title = prompt('アルバムのタイトルを変更', album.title===DEFAULT_ALBUM_TITLE ? '' : album.title)
                         if (title) {
                             // @ts-ignore
                             const newAlbum = Object.assign({}, album, { title })

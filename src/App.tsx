@@ -53,6 +53,8 @@ import Share from './Share'
 import Select from './Select'
 
 
+export const DEFAULT_ALBUM_TITLE = 'ある日のボードゲーム会'
+
 // サンプルのアルバム
 const sampleAlbum: AlbumType = {
     id: 'sample',
@@ -108,7 +110,7 @@ const createAlbum = async (e: any, user: any, dispatch: any, setUploading: any):
         // const date = new Date()
         const album: AlbumType = {
             id: '',
-            title: 'ある日のボードゲーム会',
+            title: DEFAULT_ALBUM_TITLE,
             // https://qiita.com/yuiken/items/1a43a2a87ca421626f18
             // date: new Date(`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`),
             date: new Date(),
