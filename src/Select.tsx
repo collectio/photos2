@@ -35,7 +35,7 @@ const Select: React.VFC<Props> = (props: any) => {
     const textInput = useRef(null)
     const [loading, setLoading] = useState(false)
     const defaultAlbum: unknown = null
-    const [album, setAlbum] = useState(defaultAlbum as AlbumType)
+    const [album, setStateAlbum] = useState(defaultAlbum as AlbumType)
     const [suggests, setSuggests] = useState([] as GameType[])
 
     let { id } = useParams<{ id: string }>()
@@ -48,7 +48,7 @@ const Select: React.VFC<Props> = (props: any) => {
         scrollTo(0, 0)
         if (!album) {
             const alb = albums.filter((a) => a.id === id)[0]
-            if (alb) setAlbum(alb)
+            if (alb) setStateAlbum(alb)
         }
         // @ts-ignore
         if (textInput.current) textInput.current.focus()
@@ -124,12 +124,12 @@ const Select: React.VFC<Props> = (props: any) => {
             }
             if (album.games.findIndex((g: GameType) => g.id === suggest.id) === -1) {
                 const newAlbum = Object.assign({}, album, { games: [...album.games, suggest] })
-                setAlbum(newAlbum)
+                setStateAlbum(newAlbum)
             }
         } else {
             if (album.games.findIndex((g: GameType) => g.title === suggest.title) === -1) {
                 const newAlbum = Object.assign({}, album, { games: [...album.games, suggest] })
-                setAlbum(newAlbum)
+                setStateAlbum(newAlbum)
             }
         }
         setSuggests([])
@@ -186,6 +186,10 @@ const Select: React.VFC<Props> = (props: any) => {
                                 )}
                                 <span className="title">
                                     {game.title}
+                                </span>
+                                <span className="delete" onClick={() => {
+                                }}>
+                                    <img src="/delete.svg" alt="削除" />
                                 </span>
                             </div>
                         )

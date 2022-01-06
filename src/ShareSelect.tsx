@@ -12,7 +12,7 @@ import { AlbumType, PhotoType, GameType } from './@types'
 const ShareSelect: React.VFC = (props: any) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
     const defaultAlbum: unknown = null
-    const [album, setAlbum] = useState(defaultAlbum as AlbumType)
+    const [album, setStateAlbum] = useState(defaultAlbum as AlbumType)
     const [selectedIndexes, setSelectedIndexes] = useState([] as number[])
     const [selectDisabled, setSelectDisabled] = useState(false)
 
@@ -20,7 +20,7 @@ const ShareSelect: React.VFC = (props: any) => {
     useEffect(() => {
         if (!album) {
             const alb = albums.filter((a) => a.id === id)[0]
-            if (alb) setAlbum(alb)
+            if (alb) setStateAlbum(alb)
         }
     })
 

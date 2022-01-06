@@ -22,7 +22,7 @@ import {DEFAULT_ALBUM_TITLE} from './App'
 const Album: React.VFC<Props> = (props) => {
     const albums: AlbumType[] = useSelector(selectAlbums)
     const defaultAlbum: unknown = null
-    const [album, setAlbum] = useState(defaultAlbum as AlbumType)
+    const [album, setStateAlbum] = useState(defaultAlbum as AlbumType)
     const [editMode, setEditMode] = useState(false)
     const defaultPhotos: PhotoType[] = []
     const [selectedPhotos, setSelectedPhotos] = useState(defaultPhotos)
@@ -35,13 +35,13 @@ const Album: React.VFC<Props> = (props) => {
     useEffect(() => {
         if (!album) {
             const alb = albums.find((a) => a.id === id)
-            if (alb) setAlbum(alb)
+            if (alb) setStateAlbum(alb)
         }
     }, [])
 
     useEffect(() => {
         const alb = albums.find((a) => a.id === id)
-        if (alb) setAlbum(alb)
+        if (alb) setStateAlbum(alb)
         // 各stateをリセットする
         setEditMode(false)
         setSelectedPhotos(defaultPhotos)
@@ -79,7 +79,7 @@ const Album: React.VFC<Props> = (props) => {
                             if (title) {
                                 // @ts-ignore
                                 const newAlbum = Object.assign({}, album, { title })
-                                setAlbum(newAlbum)
+                                setStateAlbum(newAlbum)
                                 props.updateAlbum(newAlbum, dispatch)
                             }
                         }}>
