@@ -30,11 +30,11 @@ const Welcome: React.VFC<Props> = (props) => {
                         Googleでログイン
                     </button>
                 </p>
-                {window.cordova && device.platform==='Android' ? null : (
+                {window.cordova && device.platform==='iOS' ? (
                     <p>
                         <button className="apple" onClick={props.AppleLogin}>Signin with Apple</button>
                     </p>
-                )}
+                ) : null}
             </div>
         </div>
     )
