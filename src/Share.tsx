@@ -51,15 +51,18 @@ const Share: React.VFC = (props: any) => {
 
     const share = async () => {
         const files: File[] = []
+        const urls: string[] = []
         for (const photo of state.photos) {
             // @ts-ignore
             const file = await convertFile(photo.image, Math.floor(Math.random() * 10))
             files.push(file)
+            // @ts-ignore
+            urls.push(photo.image)
         }
         // @ts-ignore
         if (window.cordova) {
             // @ts-ignore
-            window.plugins.socialsharing.share(null, 'Android filename', 'data:image/png;base64,R0lGODlhDAAMALMBAP8AAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAUKAAEALAAAAAAMAAwAQAQZMMhJK7iY4p3nlZ8XgmNlnibXdVqolmhcRQA7', null)
+            window.plugins.socialsharing.share(null, 'Android filename', urls, null)
         } else if (navigator.share) {
             navigator.share({
                 // text: text,
