@@ -383,7 +383,7 @@ export default function App() {
         if (user) return
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                dispatch(setUser({ uid: user.uid, photoURL: user.photoURL, displayName: user.displayName }))
+                dispatch(setUser({ uid: user.uid }))
                 loadAlbums(user, dispatch)
             }
             setLoading(false)

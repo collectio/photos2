@@ -20,17 +20,12 @@ const Home: React.VFC<Props> = (props) => {
     return (
         <div id="home">
             <nav>
+                <span></span>
                 <Link to="/">
                     <img className="logo" src="/collectio.svg" alt="Collectio" />
                 </Link>
-            </nav>
-            <div className="profile">
-                <img src={user.photoURL} alt="" />
-                <p>
-                    {user.displayName}
-                </p>
                 <button onClick={props.signOut}>ログアウト</button>
-            </div>
+            </nav>
             {props.uploading ? (
                 <div className="progress">
                     <p>アップロード中...</p>
