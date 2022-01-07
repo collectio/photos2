@@ -56,7 +56,11 @@ const Share: React.VFC = (props: any) => {
             const file = await convertFile(photo.image, Math.floor(Math.random() * 10))
             files.push(file)
         }
-        if (navigator.share) {
+        // @ts-ignore
+        if (window.cordova) {
+            // @ts-ignore
+            window.plugins.socialsharing.share(null, 'Android filename', 'data:image/png;base64,R0lGODlhDAAMALMBAP8AAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAUKAAEALAAAAAAMAAwAQAQZMMhJK7iY4p3nlZ8XgmNlnibXdVqolmhcRQA7', null)
+        } else if (navigator.share) {
             navigator.share({
                 // text: text,
                 url: 'https://collectio.jp/',
