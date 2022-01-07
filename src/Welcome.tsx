@@ -1,6 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+declare let window: any;
+declare let device: any;
+
 interface Props {
     GoogleLogin: () => void
     signInWithApple: () => void

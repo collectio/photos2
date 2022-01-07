@@ -230,13 +230,13 @@ const deletePhoto = (user: any, album: any, photo: any): Promise<void> => {
     })
 }
 
-const deletePhotos = async (user: any, album: any, dispatch:any, deletePhotos: PhotoType[]): Promise<void> => {
+const deletePhotos = async (user: any, album: any, dispatch: any, deletePhotos: PhotoType[]): Promise<void> => {
     for (const photo of deletePhotos) {
         await deletePhoto(user, album, photo).catch((error) => console.log(error))
     }
     const newPhotos: PhotoType[] = []
     for (const photo of album.photos) {
-        const isNoExist = deletePhotos.find((p) => p.image===photo.image)===undefined && newPhotos.find((p) => p.image===photo.image)===undefined
+        const isNoExist = deletePhotos.find((p) => p.image === photo.image) === undefined && newPhotos.find((p) => p.image === photo.image) === undefined
         if (isNoExist) newPhotos.push(photo)
     }
     const docRef = db.collection('albums').doc(album.id)
@@ -424,72 +424,65 @@ export default function App() {
         }
     }
 
-    const signInWithApple = (successCallback, failureCallback) => {
-        if (window.cordova) {
-          SignInWithApple.isAvailable().then(function (isAvailable) {
-            console.info(isAvailable)
-            const nonceString = nonceGen(32)
-            return SignInWithApple.request({
-              requestedScopes: [ SignInWithApple.Scope.Email ],
-              nonce: sha256(nonceString).toString()
-            }).then((result) => {
-              let provider = new firebase.auth.OAuthProvider('apple.com')
-              let credential = provider.credential({
-                idToken: result.identityToken,
-                rawNonce: nonceString
-              })
-              firebase
-                .auth()
-                .signInWithCredential(credential)
-                .then(() => {
-                  if (successCallback) successCallback()
-                })
-                .catch(error => {
-                  const errorCode = error.code;
-                  const errorMessage = error.message;
-                  console.log('firebase auth failed with Apple Sign In')
-                  console.log(errorMessage);
-                  if (failureCallback) failureCallback()
-                });
-            }).catch(error => {
-                console.error(error)
-                // alert(error.message || 'エラーが発生しました')
-                if (failureCallback) failureCallback()
-            })
-          }).catch((error) => {
-            console.log(error)
-            alert('この機種ではAppleアカウントのログインをサポートしていません')
-            if (failureCallback) failureCallback()
-          })
-        } else {
-          const provider = new firebase.auth.OAuthProvider('apple.com')
-          provider.setCustomParameters({
-            locale: 'ja_JP'
-          });    
-          auth.signInWithPopup(provider)
-          .then((result) => {
-      
-            console.log(result.user); // logged-in Apple user
-            // The signed-in user info.
-            var user = result.user;
-            // You can also get the Apple OAuth Access and ID Tokens.
-            var accessToken = result.credential.accessToken;
-            var idToken = result.credential.idToken;
-      
-          })
-          .catch(function(error) {
-            console.log(error);
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-          })  
+    function nonceGen(length: number) {
+        let result = "";
+        let characters =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
-      }
-        
+        return result;
+    }
+
+    const auth = firebase.auth();
+    // @ts-ignore
+    const signInWithApple = () => {
+        if (window.cordova) {
+            // @ts-ignore
+            SignInWithApple.isAvailable().then(function (isAvailable) {
+                console.info(isAvailable)
+                const nonceString = nonceGen(32)
+                // @ts-ignore
+                return SignInWithApple.request({
+                    // @ts-ignore
+                    requestedScopes: [SignInWithApple.Scope.Email],
+                    nonce: sha256(nonceString).toString()
+                // @ts-ignore
+                }).then((result) => {
+                    let provider = new firebase.auth.OAuthProvider('apple.com')
+                    let credential = provider.credential({
+                        idToken: result.identityToken,
+                        rawNonce: nonceString
+                    })
+                    firebase
+                        .auth()
+                        .signInWithCredential(credential)
+                        .then(() => {
+                            // if (successCallback) successCallback()
+                        })
+                        .catch(error => {
+                            const errorCode = error.code;
+                            const errorMessage = error.message;
+                            console.log('firebase auth failed with Apple Sign In')
+                            console.log(errorMessage);
+                            alert(error.message || 'エラーが発生しました')
+                            // if (failureCallback) failureCallback()
+                        });
+                // @ts-ignore
+                }).catch(error => {
+                    console.error(error)
+                    alert(error.message || 'エラーが発生しました')
+                    // if (failureCallback) failureCallback()
+                })
+            // @ts-ignore
+            }).catch((error) => {
+                console.log(error)
+                alert('この機種ではAppleアカウントのログインをサポートしていません')
+            })
+        }
+    }
+
 
     const signOut = () => {
         firebase.auth().signOut().then(() => {
