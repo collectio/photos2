@@ -437,7 +437,7 @@ export default function App() {
 
     const auth = firebase.auth();
     // @ts-ignore
-    const signInWithApple = () => {
+    const AppleLogin = () => {
         if (window.cordova) {
             // @ts-ignore
             SignInWithApple.isAvailable().then(function (isAvailable) {
@@ -522,7 +522,7 @@ export default function App() {
                                 createAlbum(e, user, dispatch, setUploading)
                             }} />
                         } else {
-                            return <Welcome GoogleLogin={GoogleLogin} signInWithApple={signInWithApple} />
+                            return <Welcome GoogleLogin={GoogleLogin} AppleLogin={AppleLogin} />
                         }
                     }}>
                     </Route>
