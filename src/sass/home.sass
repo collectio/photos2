@@ -21,20 +21,22 @@
             margin-bottom: 3rem
         button
             cursor: pointer
-            display: flex
-            justify-content: center
-            align-items: center
-            padding: 0.5rem
-            background-color: #EEEEEE
-            border: 1px solid #cccccc
-            border-radius: 10px
             &.google
-                height: 3rem
-                padding-left: 2.5rem
-                background-image: url(/google.svg)
-                background-repeat: no-repeat
-                background-size: 1rem
-                background-position: 1rem center
+                cursor: pointer
+                width: calc(382px * 0.565)
+                height: calc(92px * 0.565)
+                text-indent: -100000px
+                border: 0
+                background-image: url(/btn_google_signin_light_normal_web@2x.png)
+                background-size: calc(382px * 0.565) calc(92px * 0.565)
+            &.apple
+                cursor: pointer
+                width: calc(424px * 0.5)
+                height: calc(76px * 0.5)
+                text-indent: -100000px
+                border: 0
+                background-image: url(/apple-id-sign-in-with_2x.png)
+                background-size: calc(424px * 0.5) calc(76px * 0.5)
     .profile
         display: flex
         justify-content: space-between

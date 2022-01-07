@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 interface Props {
     GoogleLogin: () => void
+    signInWithApple: () => void
 }
 
 const Welcome: React.VFC<Props> = (props) => {
@@ -26,6 +27,11 @@ const Welcome: React.VFC<Props> = (props) => {
                         Googleでログイン
                     </button>
                 </p>
+                {window.cordova && device.platform==='Android' ? null : (
+                    <p>
+                        <button className="apple" onClick={props.signInWithApple}>Signin with Apple</button>
+                    </p>
+                )}
             </div>
         </div>
     )
