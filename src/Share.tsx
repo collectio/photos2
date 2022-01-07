@@ -58,7 +58,7 @@ const Share: React.VFC = (props: any) => {
                 urls.push(photo.image)
             }
             // @ts-ignore
-            window.plugins.socialsharing.share(null, 'Android filename', urls, null)
+            window.plugins.socialsharing.share(null, null, urls, 'https://collectio.jp/')
         } else if (navigator.share) {
             const files: File[] = []
             for (const photo of state.photos) {
