@@ -50,20 +50,22 @@ const Share: React.VFC = (props: any) => {
 
 
     const share = async () => {
-        const files: File[] = []
-        const urls: string[] = []
-        for (const photo of state.photos) {
-            // @ts-ignore
-            const file = await convertFile(photo.image, Math.floor(Math.random() * 10))
-            files.push(file)
-            // @ts-ignore
-            urls.push(photo.image)
-        }
         // @ts-ignore
         if (window.cordova) {
+            const urls: string[] = []
+            for (const photo of state.photos) {
+                // @ts-ignore
+                urls.push(photo.image)
+            }
             // @ts-ignore
             window.plugins.socialsharing.share(null, 'Android filename', urls, null)
         } else if (navigator.share) {
+            const files: File[] = []
+            for (const photo of state.photos) {
+                // @ts-ignore
+                const file = await convertFile(photo.image, Math.floor(Math.random() * 10))
+                files.push(file)
+            }
             navigator.share({
                 // text: text,
                 url: 'https://collectio.jp/',
