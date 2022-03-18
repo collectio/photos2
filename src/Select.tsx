@@ -222,7 +222,7 @@ const Select: React.VFC<Props> = (props: any) => {
                     })}
                 </div>
             ) : null}
-            <div className="photos">
+            <div className="photoViewer">
                 <div>
                 {album.photos.map((photo: PhotoType, i: number) => {
                     return (
