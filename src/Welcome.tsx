@@ -13,9 +13,11 @@ const Welcome: React.VFC<Props> = (props) => {
     return (
         <div id="home">
             <nav>
+                <span></span>
                 <Link to="/">
                     <img className="logo" src="/collectio.svg" alt="Collectio" />
                 </Link>
+                <span></span>
             </nav>
             <div className="login">
                 <h2>コレフォトへようこそ</h2>

@@ -9,7 +9,7 @@ const Component: React.VFC = (props: any) => {
                 <Link to="/">
                     <img className="logo" src="/collectio.svg" alt="Collectio" />
                 </Link>
-                <span style={{width: '66px'}}></span>
+                <span></span>
             </nav>
 
             <div className="loading">
