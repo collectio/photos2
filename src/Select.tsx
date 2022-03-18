@@ -222,6 +222,17 @@ const Select: React.VFC<Props> = (props: any) => {
                     })}
                 </div>
             ) : null}
+            <div className="photos">
+                <div>
+                {album.photos.map((photo: PhotoType, i: number) => {
+                    return (
+                        <div key={'photo' + i} className="photo">
+                            <img src={photo.image} alt="" />
+                        </div>
+                    )
+                })}
+                </div>
+            </div>
         </div>
     );
 }
