@@ -5,7 +5,6 @@ const Component: React.VFC = (props: any) => {
     return (
         <div id="home">
             <nav>
-                <span></span>
                 <Link to="/">
                     <img className="logo" src="/collectio.svg" alt="Collectio" />
                 </Link>

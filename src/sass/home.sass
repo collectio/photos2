@@ -114,6 +114,12 @@
                     max-width: 180px
                     height: 23vw
                     max-height: 180px
+                    border-top: 1px solid #CCCCCC
+                    border-bottom: 1px solid #CCCCCC
+                    &:first-child
+                        border-right: 1px solid #CCCCCC
+                    &:last-child
+                        border-left: 1px solid #CCCCCC
                     .game
                         position: relative
                         display: flex
@@ -126,7 +132,6 @@
                         max-height: 180px
                         background-color: #7c7c7c
                         background: linear-gradient(to bottom right, #7c7c7c, #acacac)
-                        border: 1px solid #CCCCCC
                         overflow: hidden
                         div
                             position: absolute
