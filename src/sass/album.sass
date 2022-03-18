@@ -86,13 +86,17 @@
             flex-wrap: wrap
             width: calc(100% - 1rem)
             margin: 0 0.5rem
-            a
+            > a
                 display: block
                 width: 24%
                 max-width: 180px
                 height: 23vw
                 max-height: 180px
-                margin: 1px
+                border: 1px solid #CCCCCC
+                &:first-child
+                    border-right: none
+                &:last-child
+                    border-left: none
                 &.add
                     display: inline-flex
                     justify-content: center
@@ -101,6 +105,7 @@
                     font-size: 2rem
                     background-color: #666666
                     text-decoration: none
+                    margin-left: 1px
                 .game
                     position: relative
                     width: 100%
@@ -118,7 +123,6 @@
                         width: 100%
                         height: 100%
                         background-size: cover
-                        border: 1px solid #CCCCCC
                     .title
                         display: flex
                         justify-content: center
