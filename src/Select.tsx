@@ -183,7 +183,7 @@ const Select: React.VFC<Props> = (props: any) => {
             </nav>
             <form action="" onSubmit={onSearch}>
                 <div className="bg">
-                    <input type="text" ref={textInput} placeholder="ゲームを検索" onChange={onSearch} />
+                    <input type="text" ref={textInput} placeholder={album.games.length >= 2 ? 'さらにゲームを追加' : 'ゲームを検索'} onChange={onSearch} />
                 </div>
                 {suggests.length === 0 && loading ? (
                     <div className="suggests">読み込み中...</div>
