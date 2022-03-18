@@ -176,7 +176,7 @@ const Select: React.VFC<Props> = (props: any) => {
                 {suggests.length === 0 ? (
                     <a onClick={() => {
                         updateAlbum()
-                    }}>
+                    }} className="complete">
                         完了
                     </a>
                 ) : null}
