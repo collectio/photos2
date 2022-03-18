@@ -63,22 +63,47 @@ const Select: React.VFC<Props> = (props: any) => {
         if (query === '') return setSuggests([])
         if (query === prevQuery) return
         prevQuery = query
-        let games = await search(query)
+
+        let suggests = await search(query)
         setLoading(true)
-        if (games.length > 0) {
+
+        if (suggests.length > 0) {
             setLoading(false)
-            setSuggests(games)
+            if (suggests.findIndex((s) => query === s.title) === -1) {
+                const suggest: any = {
+                    id: null,
+                    title: query,
+                    image: null
+                }
+                suggests.push(suggest)
+            }
+            setSuggests(suggests)
         } else {
+            // ひらがなをカタカナにして再検索してみる
             if (hiraToKana(query) !== query) {
-                games = await search(hiraToKana(query))
+                suggests = await search(hiraToKana(query))
+                if (suggests.length > 0) {
+                    setLoading(false)
+                    setSuggests(suggests)
+                }
             }
         }
-        if (games.length <= 0) {
-            const suggests = await suggest(query)
-            games = games.concat(suggests)
+        // データベースに見つからなかった
+        if (suggests.length === 0) {
+            const googleSuggests = await getSuggest(query)
+            // 見つからなかった場合、検索キーワードを出す
+            if (googleSuggests.length === 0 || googleSuggests.findIndex((s) => query === s.title) === -1) {
+                const suggest: any = {
+                    id: null,
+                    title: query,
+                    image: null
+                }
+                googleSuggests.push(suggest)
+            }
+            suggests = suggests.concat(googleSuggests)
+            setLoading(false)
+            setSuggests(suggests)
         }
-        setLoading(false)
-        setSuggests(games)
     }
     const search = async (query: string) => {
         const r = await fetch(
@@ -90,7 +115,7 @@ const Select: React.VFC<Props> = (props: any) => {
         })
         return suggests;
     }
-    const suggest = async (query: string) => {
+    const getSuggest = async (query: string) => {
         const result = await fetchJsonp(
             'https://www.google.com/complete/search?hl=ja&client=firefox&q=' + encodeURIComponent(query)
         ).then((r) => r.json());
@@ -103,15 +128,6 @@ const Select: React.VFC<Props> = (props: any) => {
             }
             suggests.push(data)
         })
-        // 見つからなかった場合、検索キーワードを出す
-        if (suggests.length === 0 || suggests.findIndex((s) => query === s.title) === -1) {
-            const suggest: any = {
-                id: null,
-                title: query,
-                image: null
-            }
-            suggests.unshift(suggest)
-        }
         return suggests
     }
     const selectSuggest = async (suggest: GameType) => {
