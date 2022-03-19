@@ -19,7 +19,6 @@ declare let window: any;
 
 
 const start = () => {
-  if (window.WkWebView) window.WkWebView.allowsBackForwardNavigationGestures(true)
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>

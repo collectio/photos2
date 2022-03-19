@@ -14,7 +14,13 @@ const Photo: React.VFC = (props: any) => {
         album: defaultAlbum as AlbumType
     })
 
-    let {index} = props.location.state
+    let index
+    try {
+        index = props.location.state.index
+    } catch {
+        props.history.push('/')
+        location.reload()
+    }
 
     let { id } = useParams<{ id: string }>()
     useEffect(() => {
