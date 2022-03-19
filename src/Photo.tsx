@@ -42,9 +42,9 @@ const Photo: React.VFC = (props: any) => {
     if (!state.album) return null
     // console.log(state.album)
     return (<div id="photo">
-        <Link to={{pathname: `/album/${id}`}} className="close">
+        <a className="close" onClick={() => props.history.goBack()}>
             <img src="/close.svg" />
-        </Link>
+        </a>
         <Slider {...sliderSettings}>
         {state.album.photos.map((p: PhotoType) => {
             // React.Fragment必須

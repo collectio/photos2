@@ -2,7 +2,14 @@ import React, { useState, useEffect, Dispatch } from 'react'
 import {withRouter} from 'react-router-dom'
 
 const Game: React.VFC = (props: any) => {
-    const { game } = props.location.state as any
+
+    let game: any
+    try {
+        game = props.location.state.game
+    } catch {
+        props.history.push('/')
+        location.reload()
+    }
     const [amazonURL, setAmazonURL] = useState('')
     useEffect(() => {
         // console.log('game', game)
