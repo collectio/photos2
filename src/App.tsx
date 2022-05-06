@@ -401,7 +401,7 @@ export default function App() {
             if (window.cordova.platformId !== 'ios') {
                 config = {
                     // 'scopes': '',
-                    'webClientId': '16919798390-gt4d4vanvgu1n0u93nasrv7vt277r9gd.apps.googleusercontent.com',
+                    'webClientId': '590643802391-m1fno3tkvrl42o0qk1t4ap80s178eo2i.apps.googleusercontent.com',
                     'offline': false
                 }
             }
