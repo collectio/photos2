@@ -4,6 +4,7 @@
     "start": "vite --open --host",
     "build": "tsc && vite build",
     "serve": "vite preview",
+    "deploy": "npx cpx \"dist/**/!(index.html)\" ../photos-cordova/www/",
     "firestore": "firebase emulators:start",
     "rule:firestore": "npx firebase use default && firebase deploy --only firestore:rules",
     "rule:storage": "npx firebase use default && firebase deploy --only storage"
