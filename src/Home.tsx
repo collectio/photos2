@@ -63,7 +63,7 @@ const Home: React.VFC<Props> = (props) => {
                 ))}
             </div>
             <form action="" encType="multipart/form-data">
-                <input className="file" title="写真を選択" multiple onChange={(e) => props.createAlbum(e, user, dispatch)} id="file" type="file" name="file" accept="image/*" multiple={true} />
+                <input className="file" title="写真を選択" onChange={(e) => props.createAlbum(e, user, dispatch)} id="file" type="file" name="file" accept="image/*" multiple={true} />
                 <label htmlFor="file"></label>
             </form>
         </div >
