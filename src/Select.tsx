@@ -197,9 +197,9 @@ const Select: React.VFC<Props> = (props: any) => {
                 ) : null}
             </form>
             <div className="games">
+                <h3>遊んだゲーム</h3>
             {album.games.length > 0 ? (
                 <>
-                    <h3>遊んだゲーム</h3>
                     {album.games.map((game: GameType, i: number) => {
                         return (
                             <div key={'game' + i} className="game">
