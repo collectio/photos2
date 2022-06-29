@@ -52,27 +52,20 @@ const Share: React.VFC = (props: any) => {
     const share = async () => {
         // @ts-ignore
         if (window.cordova) {
-            // const urls: string[] = []
-            // for (const photo of state.photos) {
-            //     // @ts-ignore
-            //     urls.push(photo.image)
-            // }
+            const urls: string[] = []
+            for (const photo of state.photos) {
+                // @ts-ignore
+                urls.push(photo.image)
+            }
             // // @ts-ignore
             // // window.plugins.socialsharing.share(null, null, urls, 'https://collectio.jp/')
             // window.plugins.socialsharing.share(null, null, urls)
 
-            const files: File[] = []
-            for (const photo of state.photos) {
-                // @ts-ignore
-                const file = await convertFile(photo.image, Math.floor(Math.random() * 10))
-                files.push(file)
-            }
-            
             // this is the complete list of currently supported params you can pass to the plugin (all optional)
             var options = {
                 // message: 'share this', // not supported on some apps (Facebook, Instagram)
                 // subject: 'the subject', // fi. for email
-                files: files, // an array of filenames either locally or remotely
+                files: urls, // an array of filenames either locally or remotely
                 url: 'https://collectio.jp/',
             };
             var onSuccess = function(result: any) {
