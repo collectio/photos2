@@ -57,29 +57,8 @@ const Share: React.VFC = (props: any) => {
                 // @ts-ignore
                 urls.push(photo.image)
             }
-            // // @ts-ignore
-            // // window.plugins.socialsharing.share(null, null, urls, 'https://collectio.jp/')
-            // window.plugins.socialsharing.share(null, null, urls)
-
-            // this is the complete list of currently supported params you can pass to the plugin (all optional)
-            var options = {
-                // message: 'share this', // not supported on some apps (Facebook, Instagram)
-                // subject: 'the subject', // fi. for email
-                files: urls, // an array of filenames either locally or remotely
-                url: 'https://collectio.jp/',
-            };
-            var onSuccess = function(result: any) {
-                console.log("Share completed? " + result.completed); // On Android apps mostly return false even while it's true
-                console.log("Shared to app: " + result.app); // On Android result.app since plugin version 5.4.0 this is no longer empty. On iOS it's empty when sharing is cancelled (result.completed=false)
-            };
-            
-            var onError = function(msg: string) {
-            console.log("Sharing failed with message: " + msg);
-            };
-              
             // @ts-ignore
-            window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
-
+            window.plugins.socialsharing.share(null, null, urls, 'https://collectio.jp/')
         } else if (navigator.share) {
             const files: File[] = []
             for (const photo of state.photos) {
