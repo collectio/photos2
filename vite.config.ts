@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import reactRefresh from '@vitejs/plugin-react-refresh'
+import react from '@vitejs/plugin-react'
 const { resolve } = require('path')
 
 // https://vitejs.dev/config/
@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     https: true
   },
-  plugins: [reactRefresh()],
+  plugins: [react()],
   publicDir: './src/assets/',
   build: {
     rollupOptions: {

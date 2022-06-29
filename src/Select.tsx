@@ -196,9 +196,10 @@ const Select: React.VFC<Props> = (props: any) => {
                     </div>
                 ) : null}
             </form>
+            <div className="games">
+                <h3>遊んだゲーム</h3>
             {album.games.length > 0 ? (
-                <div className="games">
-                    <h3>遊んだゲーム</h3>
+                <>
                     {album.games.map((game: GameType, i: number) => {
                         return (
                             <div key={'game' + i} className="game">
@@ -220,8 +221,9 @@ const Select: React.VFC<Props> = (props: any) => {
                             </div>
                         )
                     })}
-                </div>
+                </>
             ) : null}
+            </div>
             <div className="photos">
                 <div>
                 {album.photos.map((photo: PhotoType, i: number) => {
