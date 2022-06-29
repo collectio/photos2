@@ -67,7 +67,7 @@ const Share: React.VFC = (props: any) => {
                 const file = await convertFile(photo.image, Math.floor(Math.random() * 10))
                 files.push(file)
             }
-
+            
             // this is the complete list of currently supported params you can pass to the plugin (all optional)
             var options = {
                 // message: 'share this', // not supported on some apps (Facebook, Instagram)
@@ -75,8 +75,17 @@ const Share: React.VFC = (props: any) => {
                 files: files, // an array of filenames either locally or remotely
                 url: 'https://collectio.jp/',
             };
+            var onSuccess = function(result: any) {
+                console.log("Share completed? " + result.completed); // On Android apps mostly return false even while it's true
+                console.log("Shared to app: " + result.app); // On Android result.app since plugin version 5.4.0 this is no longer empty. On iOS it's empty when sharing is cancelled (result.completed=false)
+            };
+            
+            var onError = function(msg: string) {
+            console.log("Sharing failed with message: " + msg);
+            };
+              
             // @ts-ignore
-            window.plugins.socialsharing.shareWithOptions(options);
+            window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
 
         } else if (navigator.share) {
             const files: File[] = []
