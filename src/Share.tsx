@@ -51,7 +51,7 @@ const Share: React.VFC = (props: any) => {
 
     const share = async () => {
         // @ts-ignore
-        if (window.cordova) {
+        if (window.cordova && window.cordova.platformId === 'android') {
             const urls: string[] = []
             for (const photo of state.photos) {
                 // @ts-ignore
