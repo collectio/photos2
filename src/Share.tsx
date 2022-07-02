@@ -28,7 +28,7 @@ const convertFile = async (url: string, index: number) => {
 const Share: React.VFC = (props: any) => {
     const [state, setState] = useState({
         album: {} as AlbumType,
-        photos: []
+        photos: [] as any
     })
     
     useEffect(() => {
@@ -82,7 +82,7 @@ const Share: React.VFC = (props: any) => {
 
     const collectioShare = () => {
         const photoUrl = state.photos[0].image
-        window.open('collectio://share?url=' + photoUrl, '_blank')
+        window.open('collectio://share?url=' + encodeURIComponent(photoUrl), '_blank')
     }
 
     if (state.album === null) return null
